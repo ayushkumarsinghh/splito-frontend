@@ -41,11 +41,11 @@ export default function Login({ setToken, setPage }) {
 
   return (
     <div className="page-wrapper fade-in">
-      <div style={{ position: "absolute", top: "2rem", left: "2rem", right: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ position: "absolute", top: "2rem", left: "2rem", right: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 1000 }}>
         <button onClick={() => setPage("landing")} className="btn-back" style={{ position: "static" }}>
           ← Back to Home
         </button>
-        <button className="btn btn-outline" onClick={toggleTheme} style={{ width: "auto", padding: "0.5rem 1rem" }}>
+        <button className="btn btn-outline" onClick={toggleTheme} style={{ width: "auto", padding: "0.6rem 1.2rem", background: "var(--panel-bg)", backdropFilter: "blur(10px)" }}>
           {theme === "light" ? "🌙 Dark" : "☀️ Light"}
         </button>
       </div>
