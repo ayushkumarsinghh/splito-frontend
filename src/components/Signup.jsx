@@ -39,9 +39,6 @@ export default function Signup({ setPage }) {
         ← Back to Home
       </button>
       <div className="glass-panel auth-card">
-        <div style={{ textAlign: "center", marginBottom: "1rem" }}>
-          <img src="https://png.pngtree.com/png-vector/20240705/ourlarge/pngtree-blue-s-letter-logo-png-image_12974204.png" alt="Splito Logo" style={{ height: "60px", width: "auto" }} />
-        </div>
         <h2 className="text-gradient" style={{ textAlign: "center" }}>Create Account</h2>
         <p className="text-muted" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
           Join Splito to easily track expenses.

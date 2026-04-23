@@ -43,10 +43,7 @@ export default function Dashboard({ token, setToken }) {
       <div className="dashboard-wrapper">
       {/* Navbar */}
       <nav className="navbar">
-        <div className="logo">
-          <img src="https://png.pngtree.com/png-vector/20240705/ourlarge/pngtree-blue-s-letter-logo-png-image_12974204.png" alt="Splito Logo" style={{ height: "32px", width: "auto" }} />
-          <span style={{ color: "var(--primary)" }}>Splito</span>
-        </div>
+        <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span> 💸</div>
         <div style={{ display: "flex", gap: "1rem" }}>
           <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto" }}>
             {theme === "light" ? "🌙 Dark" : "☀️ Light"}
