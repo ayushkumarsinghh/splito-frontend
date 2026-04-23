@@ -1,9 +1,9 @@
 # Splito - Frontend
 
-A Canva-inspired expense tracker with a focus on modern aesthetics and premium user experience.
+A expense tracker with a focus on modern aesthetics and premium user experience.
 
 ## Features
-- Canva Aesthetic: High-impact design inspired by modern travel templates.
+- Aesthetic: High-impact design inspired by modern travel templates.
 - Dark/Light Mode: Seamless, instant theme switching with persistent user preference.
 - Glassmorphism: Beautiful translucent UI elements with background blur effects.
 - Responsive Layout: Fully optimized for mobile and desktop viewing.
