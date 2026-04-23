@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Signup({ setPage }) {
@@ -8,6 +8,18 @@ export default function Signup({ setPage }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.body.className = newTheme === "dark" ? "dark-theme" : "";
+  };
+
+  useEffect(() => {
+    document.body.className = theme === "dark" ? "dark-theme" : "";
+  }, []);
 
   const signup = async () => {
     setError("");
@@ -35,9 +47,14 @@ export default function Signup({ setPage }) {
 
   return (
     <div className="page-wrapper fade-in">
-      <button onClick={() => setPage("landing")} className="btn-back">
-        ← Back to Home
-      </button>
+      <div style={{ position: "absolute", top: "2rem", left: "2rem", right: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <button onClick={() => setPage("landing")} className="btn-back" style={{ position: "static" }}>
+          ← Back to Home
+        </button>
+        <button className="btn btn-outline" onClick={toggleTheme} style={{ width: "auto", padding: "0.5rem 1rem" }}>
+          {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+        </button>
+      </div>
       <div className="glass-panel auth-card">
         <h2 className="text-gradient" style={{ textAlign: "center" }}>Create Account</h2>
         <p className="text-muted" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
