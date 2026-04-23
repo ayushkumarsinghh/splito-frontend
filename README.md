@@ -10,10 +10,9 @@ A expense tracker with a focus on modern aesthetics and premium user experience.
 - Real-time Dashboard: Live financial summary with visual debt indicators.
 
 ## Tech Stack
-- React 18
-- Vite
-- Axios
-- Vanilla CSS
+**Client:** React.js, Axios, Vanilla CSS
+**Server:** Node.js, Express.js, MongoDB (Mongoose), JWT, Bcrypt, Helmet.js, Express Rate Limit
+**Deployment:** Vercel (Frontend), Render (Backend), MongoDB Atlas (Database)
 
 ## Environment Variables
 Create a .env file in the root directory:
