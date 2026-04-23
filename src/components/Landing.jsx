@@ -8,7 +8,10 @@ export default function Landing({ setPage }) {
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <nav className="landing-navbar">
-            <div className="landing-logo">Splito</div>
+            <div className="landing-logo">
+              <img src="https://png.pngtree.com/png-vector/20240705/ourlarge/pngtree-blue-s-letter-logo-png-image_12974204.png" alt="Splito Logo" style={{ height: "32px", width: "auto" }} />
+              <span style={{ color: "var(--primary)" }}>Splito</span>
+            </div>
             <div className="landing-nav-links">
               <span onClick={() => setPage("login")}>Login</span>
               <button className="btn-nav" onClick={() => setPage("signup")}>Sign Up</button>
@@ -88,7 +91,10 @@ export default function Landing({ setPage }) {
       <footer className="landing-footer">
         <div className="footer-content">
           <div className="footer-col">
-            <h3>Splito</h3>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
+              <img src="https://png.pngtree.com/png-vector/20240705/ourlarge/pngtree-blue-s-letter-logo-png-image_12974204.png" alt="Splito Logo" style={{ height: "24px", width: "auto" }} />
+              <h3 style={{ margin: 0 }}>Splito</h3>
+            </div>
             <p>Making money between friends simple.</p>
           </div>
           <div className="footer-col">
