@@ -27,16 +27,13 @@ export default function Signup({ setPage }) {
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-      await axios.post(`${API_URL}/api/signup`, {
+      const res = await axios.post(`${API_URL}/api/signup`, {
         username,
         email,
         password,
       });
 
-      setSuccess("Account created successfully! Redirecting...");
-      setTimeout(() => {
-        setPage("login");
-      }, 1500);
+      setSuccess(res.data.message);
     } catch (err) {
       console.log(err.response?.data);
       setError(err.response?.data?.message || "Signup failed");
