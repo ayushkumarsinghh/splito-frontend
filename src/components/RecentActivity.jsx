@@ -42,6 +42,7 @@ export default function RecentActivity({ token, refreshTrigger }) {
                   <p>
                     <strong>{item.isPayer ? "You" : item.paidBy}</strong> added "
                     <strong>{item.description}</strong>"
+                    {item.groupName && <span> in <strong>{item.groupName}</strong></span>}
                     <br />
                     <span className="activity-amount">₹{item.amount}</span>
                   </p>

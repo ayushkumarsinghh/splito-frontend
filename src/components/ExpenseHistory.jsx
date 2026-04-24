@@ -55,7 +55,7 @@ export default function ExpenseHistory({ token, refreshTrigger }) {
               <div className="history-info">
                 <span className="history-desc">{expense.description || "No description"}</span>
                 <span className="history-meta">
-                  Paid by <strong>{expense.paidBy?.username}</strong> on {new Date(expense.createdAt).toLocaleDateString()}
+                  Paid by <strong>{expense.paidBy?.username}</strong> {expense.groupId && <>in <strong>{expense.groupId.name}</strong></>} on {new Date(expense.createdAt).toLocaleDateString()}
                 </span>
               </div>
               <div className="history-amount">

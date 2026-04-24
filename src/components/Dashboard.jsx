@@ -5,6 +5,7 @@ import Settle from "./Settle";
 import RecentActivity from "./RecentActivity";
 import ExpenseHistory from "./ExpenseHistory";
 import UserSummary from "./UserSummary";
+import Groups from "./Groups";
 
 export default function Dashboard({ token, setToken }) {
   const [balances, setBalances] = useState({});
@@ -113,6 +114,11 @@ export default function Dashboard({ token, setToken }) {
               })
             )}
           </div>
+        </div>
+
+        {/* Groups Section */}
+        <div className="glass-panel" style={{ marginBottom: "2rem" }}>
+          <Groups token={token} refreshDashboard={fetchBalances} />
         </div>
 
         {/* Main Content Grid */}

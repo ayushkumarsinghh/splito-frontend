@@ -1,29 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function AddExpense({ token, refresh }) {
   const [amount, setAmount] = useState("");
   const [participants, setParticipants] = useState("");
   const [paidByUsername, setPaidByUsername] = useState("");
+  const [description, setDescription] = useState("");
+  const [groups, setGroups] = useState([]);
+  const [selectedGroupId, setSelectedGroupId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  const fetchGroups = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/groups`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setGroups(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const add = async () => {
     setError("");
-    if (!amount || !participants) {
-      setError("Please fill amount and participants");
+    if (!amount || (!participants && !selectedGroupId)) {
+      setError("Please fill amount and participants (or select a group)");
       return;
     }
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
       await axios.post(
         `${API_URL}/api/expense`,
         {
           amount: Number(amount),
-          description: "Expense",
-          participants: participants.split(",").map(id => id.trim()),
-          paidByUsername: paidByUsername.trim() || undefined
+          description: description || "Expense",
+          participants: participants ? participants.split(",").map(id => id.trim()) : undefined,
+          paidByUsername: paidByUsername.trim() || undefined,
+          groupId: selectedGroupId || undefined
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -33,6 +53,8 @@ export default function AddExpense({ token, refresh }) {
       setAmount("");
       setParticipants("");
       setPaidByUsername("");
+      setDescription("");
+      setSelectedGroupId("");
       refresh();
     } catch (err) {
       console.log(err.response?.data);
@@ -58,6 +80,30 @@ export default function AddExpense({ token, refresh }) {
       </div>
 
       <div className="input-group">
+        <label className="input-label">Description</label>
+        <input
+          className="input-field"
+          placeholder="What was it for?"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+
+      <div className="input-group">
+        <label className="input-label">Select Group (Optional)</label>
+        <select
+          className="input-field"
+          value={selectedGroupId}
+          onChange={(e) => setSelectedGroupId(e.target.value)}
+        >
+          <option value="">None (Personal / Direct)</option>
+          {groups.map(g => (
+            <option key={g._id} value={g._id}>{g.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="input-group">
         <label className="input-label">Amount (₹)</label>
         <input
           className="input-field"
@@ -72,7 +118,7 @@ export default function AddExpense({ token, refresh }) {
         <label className="input-label">Usernames (comma separated)</label>
         <input
           className="input-field"
-          placeholder="johndoe, janedoe"
+          placeholder={selectedGroupId ? "Optional for groups" : "johndoe, janedoe"}
           value={participants}
           onChange={(e) => setParticipants(e.target.value)}
         />
