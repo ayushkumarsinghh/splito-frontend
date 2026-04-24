@@ -14,11 +14,11 @@ export default function Landing({ setPage }) {
               <button className="btn-nav" onClick={() => setPage("signup")}>Sign Up</button>
             </div>
           </nav>
-          
+
           <div className="hero-main">
-            <h1 className="hero-title">SPLIT EXPENSES<br/>WITH EASE</h1>
+            <h1 className="hero-title">SPLIT EXPENSES<br />WITH EASE</h1>
             <p className="hero-subtitle">
-              The smartest way to track balances and settle up with your friends. 
+              The smartest way to track balances and settle up with your friends.
               No more awkward "you owe me" texts.
             </p>
             <button className="btn-hero" onClick={() => setPage("signup")}>
@@ -93,12 +93,11 @@ export default function Landing({ setPage }) {
           </div>
           <div className="footer-col">
             <h4>Social</h4>
-            <p>Instagram</p>
-            <p>Twitter</p>
+            <p><a href="https://x.com/AyushKumar65771">Twitter</a></p>
           </div>
           <div className="footer-col">
             <h4>Contact</h4>
-            <p>hello@splito.com</p>
+            <p>ayush2006singh2622@gmail.com</p>
           </div>
         </div>
       </footer>
