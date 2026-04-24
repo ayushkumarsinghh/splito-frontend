@@ -1051,9 +1051,9 @@ h2 {
 }
 
 .group-detail-panel {
-  width: 100%;
+  width: 95%;
   max-width: 800px;
-  max-height: 90vh;
+  max-height: calc(100vh - 4rem);
   overflow-y: auto;
   position: relative;
   background: var(--panel-bg);
@@ -1061,6 +1061,8 @@ h2 {
   animation: modalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   padding: 2.5rem;
   border-radius: 1.5rem;
+  margin: 2rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
 @keyframes modalIn {

@@ -9,6 +9,7 @@ import Groups from "./Groups";
 
 export default function Dashboard({ token, setToken }) {
   const [balances, setBalances] = useState({});
+  const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -24,17 +25,19 @@ export default function Dashboard({ token, setToken }) {
 
   useEffect(() => {
     document.body.className = theme === "dark" ? "dark-theme" : "";
-    fetchBalances();
+    fetchDashboardData();
   }, []);
 
-  const fetchBalances = async () => {
+  const fetchDashboardData = async () => {
     setError("");
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-      const res = await axios.get(`${API_URL}/api/balances`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setBalances(res.data.balances || {});
+      const [balancesRes, groupsRes] = await Promise.all([
+        axios.get(`${API_URL}/api/balances`, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${API_URL}/api/groups`, { headers: { Authorization: `Bearer ${token}` } })
+      ]);
+      setBalances(balancesRes.data.balances || {});
+      setGroups(groupsRes.data || []);
       setRefreshTrigger(prev => prev + 1);
     } catch (err) {
       console.log(err);
@@ -118,7 +121,7 @@ export default function Dashboard({ token, setToken }) {
 
         {/* Groups Section */}
         <div className="glass-panel" style={{ marginBottom: "2rem" }}>
-          <Groups token={token} refreshDashboard={fetchBalances} />
+          <Groups token={token} groups={groups} refreshDashboard={fetchDashboardData} />
         </div>
 
         {/* Main Content Grid */}
@@ -126,7 +129,7 @@ export default function Dashboard({ token, setToken }) {
           {/* Left Column: Add Expense -> History */}
           <div className="layout-col">
             <div className="glass-panel">
-              <AddExpense token={token} refresh={fetchBalances} />
+              <AddExpense token={token} groups={groups} refresh={fetchDashboardData} />
             </div>
             <div className="glass-panel">
               <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
@@ -136,7 +139,7 @@ export default function Dashboard({ token, setToken }) {
           {/* Right Column: Settle Up -> Recent Activity */}
           <div className="layout-col">
             <div className="glass-panel">
-              <Settle token={token} refresh={fetchBalances} />
+              <Settle token={token} refresh={fetchDashboardData} />
             </div>
             <div className="glass-panel">
               <RecentActivity token={token} refreshTrigger={refreshTrigger} />

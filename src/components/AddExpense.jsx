@@ -1,32 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function AddExpense({ token, refresh }) {
+export default function AddExpense({ token, groups, refresh }) {
   const [amount, setAmount] = useState("");
   const [participants, setParticipants] = useState("");
   const [paidByUsername, setPaidByUsername] = useState("");
   const [description, setDescription] = useState("");
-  const [groups, setGroups] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
-  const fetchGroups = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/api/groups`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setGroups(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const add = async () => {
     setError("");
@@ -90,16 +74,19 @@ export default function AddExpense({ token, refresh }) {
       </div>
 
       <div className="input-group">
-        <label className="input-label">Select Group (Optional)</label>
+        <label className="input-label">Expense Category / Group</label>
         <select
           className="input-field"
           value={selectedGroupId}
           onChange={(e) => setSelectedGroupId(e.target.value)}
+          style={{ fontWeight: 600, color: selectedGroupId ? "var(--primary)" : "inherit" }}
         >
-          <option value="">None (Personal / Direct)</option>
-          {groups.map(g => (
-            <option key={g._id} value={g._id}>{g.name}</option>
-          ))}
+          <option value="">👤 Personal / Direct Split</option>
+          <optgroup label="Your Groups">
+            {groups.map(g => (
+              <option key={g._id} value={g._id}>👥 {g.name}</option>
+            ))}
+          </optgroup>
         </select>
       </div>
 

@@ -1,36 +1,20 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function Groups({ token, refreshDashboard }) {
-  const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function Groups({ token, groups, refreshDashboard }) {
   const [showCreate, setShowCreate] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
   const [invites, setInvites] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
-  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteUsername, setInviteUsername] = useState("");
   const [groupBalances, setGroupBalances] = useState(null);
   const [error, setError] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   useEffect(() => {
-    fetchGroups();
     fetchInvites();
   }, []);
-
-  const fetchGroups = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/api/groups`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setGroups(res.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const fetchInvites = async () => {
     try {
@@ -54,7 +38,7 @@ export default function Groups({ token, refreshDashboard }) {
       );
       setNewGroupName("");
       setShowCreate(false);
-      fetchGroups();
+      refreshDashboard();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to create group");
     }
@@ -68,7 +52,6 @@ export default function Groups({ token, refreshDashboard }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchInvites();
-      fetchGroups();
       refreshDashboard();
     } catch (err) {
       setError("Failed to respond to invite");
@@ -80,11 +63,11 @@ export default function Groups({ token, refreshDashboard }) {
     try {
       await axios.post(
         `${API_URL}/api/groups/${selectedGroup._id}/invite`,
-        { email: inviteEmail },
+        { username: inviteUsername },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setInviteEmail("");
-      alert("Invitation sent!");
+      setInviteUsername("");
+      alert(`Invitation sent to ${inviteUsername}!`);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to send invitation");
     }
@@ -147,9 +130,7 @@ export default function Groups({ token, refreshDashboard }) {
       )}
 
       <div className="groups-list">
-        {loading ? (
-          <p>Loading groups...</p>
-        ) : groups.length === 0 ? (
+        {groups.length === 0 ? (
           <p className="text-muted">No groups yet.</p>
         ) : (
           groups.map((group) => (
@@ -217,11 +198,11 @@ export default function Groups({ token, refreshDashboard }) {
                 <h4 className="section-title">➕ Invite Friends</h4>
                 <form onSubmit={handleInvite} className="invite-form">
                   <input
-                    type="email"
+                    type="text"
                     className="input-field"
-                    placeholder="Enter friend's email"
-                    value={inviteEmail}
-                    onChange={(e) => setInviteEmail(e.target.value)}
+                    placeholder="Enter username"
+                    value={inviteUsername}
+                    onChange={(e) => setInviteUsername(e.target.value)}
                     required
                   />
                   <button type="submit" className="btn btn-primary" style={{ width: "auto" }}>Invite</button>
