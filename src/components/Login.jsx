@@ -6,7 +6,6 @@ export default function Login({ setToken, setPage }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   const toggleTheme = () => {
@@ -18,12 +17,6 @@ export default function Login({ setToken, setPage }) {
 
   useEffect(() => {
     document.body.className = theme === "dark" ? "dark-theme" : "";
-    
-    // Check for verification success
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("verified") === "true") {
-      setSuccess("Email verified successfully! You can now log in.");
-    }
   }, []);
 
   const login = async () => {
@@ -87,12 +80,6 @@ export default function Login({ setToken, setPage }) {
         {error && (
           <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
             {error}
-          </div>
-        )}
-
-        {success && (
-          <div className="text-success" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
-            {success}
           </div>
         )}
 
