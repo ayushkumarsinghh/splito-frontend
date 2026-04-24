@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+
 import axios from "axios";
 
 export default function Groups({ token, groups, refreshDashboard }) {
@@ -153,7 +155,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
         )}
       </div>
 
-      {selectedGroup && (
+      {selectedGroup && createPortal(
         <div className="group-detail-overlay fade-in">
           <div className="glass-panel group-detail-panel">
             <div className="group-detail-header">
@@ -217,7 +219,8 @@ export default function Groups({ token, groups, refreshDashboard }) {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
