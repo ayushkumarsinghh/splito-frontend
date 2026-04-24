@@ -5,9 +5,14 @@ export default function Settle({ token, refresh }) {
   const [toUsername, setToUsername] = useState("");
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const settle = async () => {
-    if (!toUsername || !amount) return alert("Please fill all fields");
+    setError("");
+    if (!toUsername || !amount) {
+      setError("Please fill all fields");
+      return;
+    }
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -27,7 +32,7 @@ export default function Settle({ token, refresh }) {
       refresh();
     } catch (err) {
       console.log(err.response?.data);
-      alert(err.response?.data?.message || "Settlement failed");
+      setError(err.response?.data?.message || "Settlement failed");
     } finally {
       setLoading(false);
     }
@@ -58,6 +63,12 @@ export default function Settle({ token, refresh }) {
           onChange={(e) => setAmount(e.target.value)}
         />
       </div>
+
+      {error && (
+        <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+          {error}
+        </div>
+      )}
 
       <button 
         className="btn" 

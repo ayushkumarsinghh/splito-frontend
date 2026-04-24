@@ -12,6 +12,7 @@ export default function Dashboard({ token, setToken }) {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [error, setError] = useState("");
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -26,6 +27,7 @@ export default function Dashboard({ token, setToken }) {
   }, []);
 
   const fetchBalances = async () => {
+    setError("");
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
       const res = await axios.get(`${API_URL}/api/balances`, {
@@ -35,6 +37,7 @@ export default function Dashboard({ token, setToken }) {
       setRefreshTrigger(prev => prev + 1);
     } catch (err) {
       console.log(err);
+      setError(err.response?.data?.message || "Failed to load dashboard data");
     } finally {
       setLoading(false);
     }
@@ -61,6 +64,12 @@ export default function Dashboard({ token, setToken }) {
             </button>
           </div>
         </nav>
+        
+        {error && (
+          <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "1rem", borderRadius: "1rem", marginBottom: "2rem", textAlign: "center", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+            {error}
+          </div>
+        )}
 
         {/* Top Section: Balances */}
         <div className="glass-panel" style={{ marginBottom: "2rem" }}>

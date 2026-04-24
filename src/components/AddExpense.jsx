@@ -6,9 +6,14 @@ export default function AddExpense({ token, refresh }) {
   const [participants, setParticipants] = useState("");
   const [paidByUsername, setPaidByUsername] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const add = async () => {
-    if (!amount || !participants) return alert("Please fill amount and participants");
+    setError("");
+    if (!amount || !participants) {
+      setError("Please fill amount and participants");
+      return;
+    }
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -31,7 +36,7 @@ export default function AddExpense({ token, refresh }) {
       refresh();
     } catch (err) {
       console.log(err.response?.data);
-      alert(err.response?.data?.message || "Failed to add expense");
+      setError(err.response?.data?.message || "Failed to add expense");
     } finally {
       setLoading(false);
     }
@@ -72,6 +77,12 @@ export default function AddExpense({ token, refresh }) {
           onChange={(e) => setParticipants(e.target.value)}
         />
       </div>
+
+      {error && (
+        <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+          {error}
+        </div>
+      )}
 
       <button className="btn btn-primary" onClick={add} disabled={loading}>
         {loading ? "Adding..." : "Add Expense"}
