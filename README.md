@@ -13,7 +13,7 @@ A expense tracker with a focus on modern aesthetics and premium user experience.
 
 **Client:** React.js, Axios, Vanilla CSS
 
-**Server:** Node.js, Express.js, MongoDB (Mongoose), JWT, Bcrypt, Helmet.js, Express Rate Limit
+**Server:** Node.js, Express.js, MongoDB, JWT, Bcrypt, Helmet.js, Express Rate Limit
 
 **Deployment:** Vercel, Render, MongoDB Atlas
 
