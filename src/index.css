@@ -292,11 +292,99 @@ h2 {
   }
 }
 
-.balances-grid {
+/* Dashboard Layouts */
+.dashboard-layout-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .dashboard-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.layout-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.balances-grid-horizontal {
+  display: flex;
   gap: 1.25rem;
-  margin-top: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) transparent;
+}
+
+.balances-grid-horizontal::-webkit-scrollbar {
+  height: 6px;
+}
+
+.balances-grid-horizontal::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 10px;
+}
+
+.balance-card-mini {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 1.25rem;
+  border-radius: 1rem;
+  min-width: 220px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.balance-card-mini:hover {
+  transform: translateY(-4px) scale(1.02);
+  background: var(--card-hover);
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.balance-card-mini::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 4px;
+  background: var(--primary);
+  opacity: 0.4;
+}
+
+.balance-card-mini.owes-you-card::before { background: var(--success); }
+.balance-card-mini.you-owe-card::before { background: var(--danger); }
+
+.avatar-small {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.empty-state-mini {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 1rem;
+  border: 1px dashed var(--border-color);
+  width: 100%;
 }
 
 .balance-card {
@@ -441,12 +529,22 @@ h2 {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .activity-amount {
   font-weight: 700;
   color: var(--primary);
   font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 150px;
 }
 
 .activity-time {
@@ -487,6 +585,10 @@ h2 {
 .history-desc {
   font-weight: 600;
   font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
 }
 
 .history-meta {
@@ -499,6 +601,7 @@ h2 {
   font-family: 'Outfit', sans-serif;
   font-size: 1.1rem;
   color: var(--primary);
+  white-space: nowrap;
 }
 
 .search-box {

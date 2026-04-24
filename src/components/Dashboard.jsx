@@ -43,110 +43,101 @@ export default function Dashboard({ token, setToken }) {
   return (
     <div className="dashboard-bg fade-in">
       <div className="dashboard-wrapper">
-      {/* Navbar */}
-      <nav className="navbar">
-        <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span> 💸</div>
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto" }}>
-            {theme === "light" ? "🌙 Dark" : "☀️ Light"}
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => {
-              localStorage.removeItem("token");
-              setToken(null);
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
+        {/* Navbar */}
+        <nav className="navbar">
+          <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span> 💸</div>
+          <div style={{ display: "flex", gap: "1rem" }}>
+            <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto" }}>
+              {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                localStorage.removeItem("token");
+                setToken(null);
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        </nav>
 
-      <div className="dashboard-grid">
-        {/* Left Column */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-          
-          {/* Balances */}
-          <div className="glass-panel">
-            <h2 style={{ fontSize: "1.8rem", marginBottom: "0.5rem", color: "var(--primary)" }}>Your Balances</h2>
-            <p className="text-muted" style={{ marginBottom: "1rem" }}>Click a card to see details.</p>
+        {/* Top Section: Balances */}
+        <div className="glass-panel" style={{ marginBottom: "2rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1.5rem" }}>
+            <h2 style={{ fontSize: "1.8rem", color: "var(--primary)", margin: 0 }}>Your Balances</h2>
+            <p className="text-muted">Click a card to see details.</p>
+          </div>
 
-            <div className="balances-grid">
-              {loading ? (
-                <p className="text-muted" style={{ gridColumn: "1/-1" }}>Loading balances...</p>
-              ) : Object.keys(balances).length === 0 ? (
-                <div className="empty-state">
-                  <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🎉</div>
-                  <h3 style={{ margin: 0 }}>You're all settled up!</h3>
-                  <p>No outstanding balances right now.</p>
-                </div>
-              ) : (
-                Object.keys(balances).map((userId) => {
-                  const b = balances[userId];
-                  const isOwed = b.owesYou && b.owesYou > 0;
-                  const isDebt = b.youOwe && b.youOwe > 0;
-                  
-                  return (
-                    <div 
-                      key={userId} 
-                      className={`balance-card ${isOwed ? "owes-you-card" : isDebt ? "you-owe-card" : ""}`}
-                      onClick={() => setSelectedUser({ id: userId, name: b.name })}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <div className="balance-header">
-                        <div className="avatar">
-                          {b.name ? b.name.charAt(0).toUpperCase() : "?"}
-                        </div>
-                        <h4 style={{ margin: 0, fontSize: "1.1rem" }}>{b.name}</h4>
+          <div className="balances-grid-horizontal">
+            {loading ? (
+              <p className="text-muted">Loading balances...</p>
+            ) : Object.keys(balances).length === 0 ? (
+              <div className="empty-state-mini">
+                <div style={{ fontSize: "2rem" }}>🎉</div>
+                <p>You're all settled up! No outstanding balances.</p>
+              </div>
+            ) : (
+              Object.keys(balances).map((userId) => {
+                const b = balances[userId];
+                const isOwed = b.owesYou && b.owesYou > 0;
+                const isDebt = b.youOwe && b.youOwe > 0;
+                
+                return (
+                  <div 
+                    key={userId} 
+                    className={`balance-card-mini ${isOwed ? "owes-you-card" : isDebt ? "you-owe-card" : ""}`}
+                    onClick={() => setSelectedUser({ id: userId, name: b.name })}
+                  >
+                    <div className="balance-header">
+                      <div className="avatar-small">
+                        {b.name ? b.name.charAt(0).toUpperCase() : "?"}
                       </div>
-                      
-                      {b.owesYou && (
-                        <p className="text-success" style={{ marginTop: "1rem", fontWeight: 600 }}>
-                          {b.name} owes you ₹{b.owesYou}
-                        </p>
-                      )}
-                      {b.youOwe && (
-                        <p className="text-danger" style={{ marginTop: "1rem", fontWeight: 600 }}>
-                          You owe {b.name} ₹{b.youOwe}
-                        </p>
-                      )}
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <h4 style={{ margin: 0, fontSize: "1rem" }}>{b.name}</h4>
+                        {b.owesYou && <span className="text-success" style={{ fontSize: "0.9rem", fontWeight: 600 }}>owes you ₹{b.owesYou}</span>}
+                        {b.youOwe && <span className="text-danger" style={{ fontSize: "0.9rem", fontWeight: 600 }}>you owe ₹{b.youOwe}</span>}
+                      </div>
                     </div>
-                  );
-                })
-              )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="dashboard-layout-grid">
+          {/* Left Column: Add Expense -> History */}
+          <div className="layout-col">
+            <div className="glass-panel">
+              <AddExpense token={token} refresh={fetchBalances} />
+            </div>
+            <div className="glass-panel">
+              <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
             </div>
           </div>
 
-          {/* History */}
-          <div className="glass-panel">
-            <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
-          </div>
-
-        </div>
-
-        {/* Right Column */}
-        <div className="forms-container">
-          <div className="glass-panel" style={{ padding: "2rem" }}>
-            <AddExpense token={token} refresh={fetchBalances} />
-          </div>
-          <div className="glass-panel" style={{ padding: "2rem" }}>
-            <Settle token={token} refresh={fetchBalances} />
-          </div>
-          <div className="glass-panel" style={{ padding: "2rem" }}>
-            <RecentActivity token={token} refreshTrigger={refreshTrigger} />
+          {/* Right Column: Settle Up -> Recent Activity */}
+          <div className="layout-col">
+            <div className="glass-panel">
+              <Settle token={token} refresh={fetchBalances} />
+            </div>
+            <div className="glass-panel">
+              <RecentActivity token={token} refreshTrigger={refreshTrigger} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    {selectedUser && (
-      <UserSummary 
-        token={token} 
-        userId={selectedUser.id} 
-        userName={selectedUser.name} 
-        onClose={() => setSelectedUser(null)} 
-      />
-    )}
+      {selectedUser && (
+        <UserSummary 
+          token={token} 
+          userId={selectedUser.id} 
+          userName={selectedUser.name} 
+          onClose={() => setSelectedUser(null)} 
+        />
+      )}
     </div>
   );
 }
