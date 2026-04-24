@@ -6,8 +6,10 @@ import RecentActivity from "./RecentActivity";
 import ExpenseHistory from "./ExpenseHistory";
 import UserSummary from "./UserSummary";
 import Groups from "./Groups";
+import Profile from "./Profile";
 
 export default function Dashboard({ token, setToken }) {
+  const [activeView, setActiveView] = useState("dashboard");
   const [balances, setBalances] = useState({});
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +56,9 @@ export default function Dashboard({ token, setToken }) {
         <nav className="navbar">
           <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span> 💸</div>
           <div style={{ display: "flex", gap: "1rem" }}>
+            <button className="btn btn-outline" onClick={() => setActiveView(activeView === "dashboard" ? "profile" : "dashboard")} style={{ padding: "0.5rem 1rem", width: "auto" }}>
+              {activeView === "dashboard" ? "👤 Profile" : "🏠 Dashboard"}
+            </button>
             <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto" }}>
               {theme === "light" ? "🌙 Dark" : "☀️ Light"}
             </button>
@@ -75,8 +80,12 @@ export default function Dashboard({ token, setToken }) {
           </div>
         )}
 
-        {/* Top Section: Balances */}
-        <div className="glass-panel" style={{ marginBottom: "2rem" }}>
+        {activeView === "profile" ? (
+          <Profile token={token} onBack={() => setActiveView("dashboard")} />
+        ) : (
+          <>
+            {/* Top Section: Balances */}
+            <div className="glass-panel" style={{ marginBottom: "2rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1.5rem" }}>
             <h2 style={{ fontSize: "1.8rem", color: "var(--primary)", margin: 0 }}>Your Balances</h2>
             <p className="text-muted">Click a card to see details.</p>
@@ -146,6 +155,8 @@ export default function Dashboard({ token, setToken }) {
             </div>
           </div>
         </div>
+        </>
+        )}
       </div>
 
       {selectedUser && (
