@@ -147,7 +147,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
                   {group.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <div style={{ fontWeight: 600, color: "white" }}>{group.name}</div>
+                  <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{group.name}</div>
                   <div className="text-muted" style={{ fontSize: "0.75rem" }}>{group.members.length} members</div>
                 </div>
               </div>

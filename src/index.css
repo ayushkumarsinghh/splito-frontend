@@ -156,15 +156,15 @@ h2 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: white;
+  color: var(--text-primary);
 }
 
 /* Cards & Containers */
 .glass-panel {
-  background: rgba(18, 15, 23, 0.85);
+  background: var(--panel-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
   border-radius: 1.5rem;
   padding: 2.5rem;
   box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
@@ -519,7 +519,7 @@ h2 {
   border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
-  color: white; /* Ensure text is white */
+  color: var(--text-primary);
 }
 
 .activity-item:hover {
@@ -545,11 +545,11 @@ h2 {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.4;
-  color: #e2e8f0; /* Light gray text for readability */
+  color: var(--text-secondary);
 }
 
 .activity-details strong {
-  color: white;
+  color: var(--text-primary);
 }
 
 .activity-amount {
@@ -572,19 +572,19 @@ h2 {
   border-radius: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(255, 255, 255, 0.03);
-  color: white;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-primary);
 }
 
 .group-card:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--card-hover);
   border-color: var(--primary);
   transform: translateY(-2px);
 }
 
 .group-card.active {
-  background: rgba(132, 0, 255, 0.15);
+  background: rgba(132, 0, 255, 0.1);
   border-color: var(--primary);
 }
 
@@ -608,12 +608,12 @@ h2 {
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--card-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
   border-radius: 1rem;
   transition: all 0.3s ease;
-  color: white;
+  color: var(--text-primary);
 }
 
 .history-item:hover {

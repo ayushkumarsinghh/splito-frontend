@@ -14,7 +14,7 @@ const BentoPanel = ({
   enableStars = true,
   enableTilt = true,
   clickEffect = true,
-  particleCount = 15,
+  particleCount = 20,
   ...props
 }) => {
   const panelRef = useRef(null);
@@ -114,18 +114,18 @@ const BentoPanel = ({
         panelRef.current.appendChild(p);
         particlesRef.current.push(p);
 
-        gsap.fromTo(p, { scale: 0, opacity: 0 }, { 
-          scale: 1, 
-          opacity: 0.6, 
+        gsap.fromTo(p, { scale: 0, opacity: 0 }, {
+          scale: 1,
+          opacity: 0.6,
           duration: 0.5,
           y: '-=20',
           x: `+=${(Math.random() - 0.5) * 40}`,
           onComplete: () => {
-            gsap.to(p, { 
-              opacity: 0, 
-              scale: 0, 
-              duration: 1, 
-              onComplete: () => p.remove() 
+            gsap.to(p, {
+              opacity: 0,
+              scale: 0,
+              duration: 1,
+              onComplete: () => p.remove()
             });
           }
         });
@@ -166,7 +166,10 @@ const BentoPanel = ({
       }}
       {...props}
     >
-      <div style={{ position: 'relative', zIndex: 3 }}>
+      <div 
+        className={contentClassName}
+        style={{ position: 'relative', zIndex: 3, ...contentStyle }}
+      >
         {children}
       </div>
     </div>

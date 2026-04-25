@@ -53,13 +53,22 @@ export default function Dashboard({ token, setToken }) {
   return (
     <div className="dashboard-bg fade-in">
       <div className="dashboard-wrapper">
-        <BentoPanel className="navbar" style={{ marginBottom: "3rem", padding: "1rem 2rem" }}>
+        <BentoPanel 
+          className="navbar" 
+          style={{ marginBottom: "3rem" }}
+          contentStyle={{ 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "center",
+            padding: "1rem 2rem"
+          }}
+        >
           <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span></div>
           <div style={{ display: "flex", gap: "1rem" }}>
-            <button className="btn btn-outline" onClick={() => setActiveView(activeView === "dashboard" ? "profile" : "dashboard")} style={{ padding: "0.5rem 1rem", width: "auto" }}>
+            <button className="btn btn-outline" onClick={() => setActiveView(activeView === "dashboard" ? "profile" : "dashboard")} style={{ padding: "0.5rem 1rem", width: "auto", color: "var(--text-primary)" }}>
               {activeView === "dashboard" ? "Profile" : "Dashboard"}
             </button>
-            <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto" }}>
+            <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto", color: "var(--text-primary)" }}>
               {theme === "light" ? "Dark" : "Light"}
             </button>
             <button
@@ -121,7 +130,7 @@ export default function Dashboard({ token, setToken }) {
                         {b.name ? b.name.charAt(0).toUpperCase() : "?"}
                       </div>
                       <div style={{ display: "flex", flexDirection: "column" }}>
-                        <h4 style={{ margin: 0, fontSize: "1rem", color: "white" }}>{b.name}</h4>
+                        <h4 style={{ margin: 0, fontSize: "1rem", color: "var(--text-primary)" }}>{b.name}</h4>
                         {isOwed && <span className="text-success" style={{ fontSize: "0.9rem", fontWeight: 600 }}>owes you ₹{b.owesYou}</span>}
                         {isDebt && <span className="text-danger" style={{ fontSize: "0.9rem", fontWeight: 600 }}>you owe ₹{b.youOwe}</span>}
                         {!isOwed && !isDebt && <span className="text-muted" style={{ fontSize: "0.9rem" }}>Settled up</span>}
