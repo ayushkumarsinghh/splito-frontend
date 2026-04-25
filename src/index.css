@@ -133,11 +133,20 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
   margin-bottom: 3rem;
-  background: var(--panel-bg);
-  border-radius: 1rem;
-  box-shadow: var(--panel-shadow);
+  border: none;
+  background: transparent;
+}
+
+.navbar .btn-outline {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.navbar .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 .logo {
@@ -147,6 +156,7 @@ h2 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: white;
 }
 
 /* Cards & Containers */
@@ -509,6 +519,7 @@ h2 {
   border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
+  color: white; /* Ensure text is white */
 }
 
 .activity-item:hover {
@@ -527,13 +538,18 @@ h2 {
   justify-content: center;
   font-size: 1.2rem;
   color: var(--primary);
+  flex-shrink: 0;
 }
 
 .activity-details p {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.4;
-  color: var(--text-primary);
+  color: #e2e8f0; /* Light gray text for readability */
+}
+
+.activity-details strong {
+  color: white;
 }
 
 .activity-amount {
@@ -548,6 +564,28 @@ h2 {
   font-size: 0.8rem;
   color: var(--text-secondary);
   opacity: 0.8;
+}
+
+/* Group Cards */
+.group-card {
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  color: white;
+}
+
+.group-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.group-card.active {
+  background: rgba(132, 0, 255, 0.15);
+  border-color: var(--primary);
 }
 
 /* Expense History */
@@ -575,6 +613,7 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 1rem;
   transition: all 0.3s ease;
+  color: white;
 }
 
 .history-item:hover {

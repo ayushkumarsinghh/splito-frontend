@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-
 import axios from "axios";
+import BentoPanel from "./MagicBento/BentoPanel";
 
 export default function Groups({ token, groups, refreshDashboard }) {
   const [showCreate, setShowCreate] = useState(false);
@@ -136,21 +136,22 @@ export default function Groups({ token, groups, refreshDashboard }) {
           <p className="text-muted">No groups yet.</p>
         ) : (
           groups.map((group) => (
-            <div
+            <BentoPanel
               key={group._id}
               className={`group-card ${selectedGroup?._id === group._id ? "active" : ""}`}
               onClick={() => selectGroup(group)}
+              style={{ padding: "1rem", marginBottom: "0.5rem" }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <div className="avatar-small" style={{ background: "var(--primary)", fontSize: "0.8rem" }}>
                   {group.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <div style={{ fontWeight: 600 }}>{group.name}</div>
+                  <div style={{ fontWeight: 600, color: "white" }}>{group.name}</div>
                   <div className="text-muted" style={{ fontSize: "0.75rem" }}>{group.members.length} members</div>
                 </div>
               </div>
-            </div>
+            </BentoPanel>
           ))
         )}
       </div>

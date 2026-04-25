@@ -135,7 +135,7 @@ export default function Settle({ token, refresh }) {
         className="btn" 
         onClick={initiatePayment} 
         disabled={loading}
-        style={{ background: "var(--success)", color: "white", marginBottom: "2rem" }}
+        style={{ background: "linear-gradient(135deg, var(--primary), var(--secondary))", color: "white", marginBottom: "2rem" }}
       >
         {loading ? "Processing..." : "Pay Now"}
       </button>

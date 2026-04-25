@@ -53,8 +53,7 @@ export default function Dashboard({ token, setToken }) {
   return (
     <div className="dashboard-bg fade-in">
       <div className="dashboard-wrapper">
-        {/* Navbar */}
-        <nav className="navbar">
+        <BentoPanel className="navbar" style={{ marginBottom: "3rem", padding: "1rem 2rem" }}>
           <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span></div>
           <div style={{ display: "flex", gap: "1rem" }}>
             <button className="btn btn-outline" onClick={() => setActiveView(activeView === "dashboard" ? "profile" : "dashboard")} style={{ padding: "0.5rem 1rem", width: "auto" }}>
@@ -73,7 +72,7 @@ export default function Dashboard({ token, setToken }) {
               Logout
             </button>
           </div>
-        </nav>
+        </BentoPanel>
         
         {error && (
           <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "1rem", borderRadius: "1rem", marginBottom: "2rem", textAlign: "center", border: "1px solid rgba(239, 68, 68, 0.2)" }}>

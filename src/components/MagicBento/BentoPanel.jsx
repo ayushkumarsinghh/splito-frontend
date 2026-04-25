@@ -14,7 +14,8 @@ const BentoPanel = ({
   enableStars = true,
   enableTilt = true,
   clickEffect = true,
-  particleCount = 15
+  particleCount = 15,
+  ...props
 }) => {
   const panelRef = useRef(null);
   const spotlightRef = useRef(null);
@@ -161,11 +162,9 @@ const BentoPanel = ({
       className={`magic-bento-panel magic-bento-panel--border-glow ${className}`}
       style={{
         '--glow-color': glowColor,
-        background: 'rgba(18, 15, 23, 0.85)', // Consistent opacity
-        backdropFilter: 'blur(24px)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
         ...style
       }}
+      {...props}
     >
       <div style={{ position: 'relative', zIndex: 3 }}>
         {children}
