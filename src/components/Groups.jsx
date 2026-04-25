@@ -86,6 +86,20 @@ export default function Groups({ token, groups, refreshDashboard }) {
     }
   };
 
+  const handleLeaveGroup = async () => {
+    if (!window.confirm("Are you sure you want to leave this group?")) return;
+    try {
+      await axios.delete(
+        `${API_URL}/api/groups/${selectedGroup._id}/leave`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setSelectedGroup(null);
+      refreshDashboard();
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to leave group");
+    }
+  };
+
   const selectGroup = (group) => {
     setSelectedGroup(group);
     fetchGroupBalances(group._id);
@@ -171,7 +185,16 @@ export default function Groups({ token, groups, refreshDashboard }) {
                   </p>
                 </div>
               </div>
-              <button className="btn-close" onClick={() => setSelectedGroup(null)}>×</button>
+              <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                <button 
+                  className="btn btn-outline btn-danger" 
+                  onClick={handleLeaveGroup}
+                  style={{ width: "auto", padding: "0.5rem 1rem", fontSize: "0.85rem" }}
+                >
+                  Leave Group
+                </button>
+                <button className="btn-close" onClick={() => setSelectedGroup(null)}>×</button>
+              </div>
             </div>
 
             <div className="group-detail-content">
