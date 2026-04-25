@@ -9,6 +9,8 @@ const BentoPanel = ({
   children,
   className = '',
   style = {},
+  contentStyle = {},
+  contentClassName = '',
   glowColor = DEFAULT_GLOW_COLOR,
   spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
   enableStars = true,
