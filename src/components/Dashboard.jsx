@@ -60,15 +60,16 @@ export default function Dashboard({ token, setToken }) {
             display: "flex", 
             justifyContent: "space-between", 
             alignItems: "center",
-            padding: "1rem 2rem"
+            padding: "1rem 2rem",
+            width: "100%"
           }}
         >
           <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span></div>
           <div style={{ display: "flex", gap: "1rem" }}>
-            <button className="btn btn-outline" onClick={() => setActiveView(activeView === "dashboard" ? "profile" : "dashboard")} style={{ padding: "0.5rem 1rem", width: "auto", color: "var(--text-primary)" }}>
+            <button className="btn btn-outline" onClick={() => setActiveView(activeView === "dashboard" ? "profile" : "dashboard")} style={{ padding: "0.5rem 1rem", width: "auto" }}>
               {activeView === "dashboard" ? "Profile" : "Dashboard"}
             </button>
-            <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto", color: "var(--text-primary)" }}>
+            <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto" }}>
               {theme === "light" ? "Dark" : "Light"}
             </button>
             <button

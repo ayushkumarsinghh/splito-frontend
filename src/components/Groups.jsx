@@ -176,7 +176,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
 
             <div className="group-detail-content">
               <div className="detail-section">
-                <h4 className="section-title">📊 Group Balances</h4>
+                <h4 className="panel-section-title">📊 Group Balances</h4>
                 {groupBalances ? (
                   <div className="balances-list">
                     {Object.values(groupBalances).map((mb) => (
@@ -198,7 +198,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
               </div>
 
               <div className="detail-section">
-                <h4 className="section-title">➕ Invite Friends</h4>
+                <h4 className="panel-section-title">➕ Invite Friends</h4>
                 <form onSubmit={handleInvite} className="invite-form">
                   <input
                     type="text"
@@ -211,7 +211,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
                   <button type="submit" className="btn btn-primary" style={{ width: "auto" }}>Invite</button>
                 </form>
 
-                <h4 className="section-title" style={{ marginTop: "1.5rem" }}>👥 Members ({selectedGroup.members.length})</h4>
+                <h4 className="panel-section-title" style={{ marginTop: "1.5rem" }}>👥 Members ({selectedGroup.members.length})</h4>
                 <div className="members-badges">
                   {selectedGroup.members.map((m) => (
                     <span key={m._id} className="badge-outline">{m.username}</span>
