@@ -35,7 +35,7 @@ export default function RecentActivity({ token, refreshTrigger }) {
           {activity.map((item) => (
             <div key={item.id} className="activity-item">
               <div className="activity-icon">
-                {item.type === "expense" ? "💸" : "🤝"}
+                {item.type === "expense" ? "●" : "○"}
               </div>
               <div className="activity-details">
                 {item.type === "expense" ? (

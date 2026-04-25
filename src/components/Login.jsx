@@ -46,7 +46,7 @@ export default function Login({ setToken, setPage }) {
           ← Back to Home
         </button>
         <button className="btn btn-outline" onClick={toggleTheme} style={{ width: "auto", padding: "0.6rem 1.2rem", background: "var(--panel-bg)", backdropFilter: "blur(10px)" }}>
-          {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+          {theme === "light" ? "Dark" : "Light"}
         </button>
       </div>
       <div className="glass-panel auth-card">

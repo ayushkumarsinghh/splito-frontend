@@ -7,6 +7,7 @@ import ExpenseHistory from "./ExpenseHistory";
 import UserSummary from "./UserSummary";
 import Groups from "./Groups";
 import Profile from "./Profile";
+import MagicBento from "./MagicBento/MagicBento";
 
 export default function Dashboard({ token, setToken }) {
   const [activeView, setActiveView] = useState("dashboard");
@@ -49,18 +50,41 @@ export default function Dashboard({ token, setToken }) {
     }
   };
 
+  // Format balances for MagicBento
+  const bentoData = Object.keys(balances).map(userId => {
+    const b = balances[userId];
+    const isOwed = b.owesYou && b.owesYou > 0;
+    const isDebt = b.youOwe && b.youOwe > 0;
+
+    return {
+      label: "Balance Detail",
+      title: b.name,
+      description: isOwed ? `Owes you ₹${b.owesYou}` : isDebt ? `You owe ₹${b.youOwe}` : "All settled up",
+      color: "#120F17",
+      onClick: () => setSelectedUser({ id: userId, name: b.name }),
+      style: {
+        border: `1px solid ${isOwed ? "rgba(34, 197, 94, 0.3)" : isDebt ? "rgba(239, 68, 68, 0.3)" : "var(--border-color)"}`
+      },
+      headerRight: (
+        <div className="avatar-small">
+          {b.name ? b.name.charAt(0).toUpperCase() : "?"}
+        </div>
+      )
+    };
+  });
+
   return (
     <div className="dashboard-bg fade-in">
       <div className="dashboard-wrapper">
         {/* Navbar */}
         <nav className="navbar">
-          <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span> 💸</div>
+          <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span></div>
           <div style={{ display: "flex", gap: "1rem" }}>
             <button className="btn btn-outline" onClick={() => setActiveView(activeView === "dashboard" ? "profile" : "dashboard")} style={{ padding: "0.5rem 1rem", width: "auto" }}>
-              {activeView === "dashboard" ? "👤 Profile" : "🏠 Dashboard"}
+              {activeView === "dashboard" ? "Profile" : "Dashboard"}
             </button>
             <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto" }}>
-              {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+              {theme === "light" ? "Dark" : "Light"}
             </button>
             <button
               className="btn btn-danger"
@@ -85,47 +109,27 @@ export default function Dashboard({ token, setToken }) {
         ) : (
           <>
             {/* Top Section: Balances */}
-            <div className="glass-panel" style={{ marginBottom: "2rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1.5rem" }}>
+            <div className="glass-panel" style={{ marginBottom: "2rem", padding: "1rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1rem", padding: "0 1rem" }}>
             <h2 style={{ fontSize: "1.8rem", color: "var(--primary)", margin: 0 }}>Your Balances</h2>
             <p className="text-muted">Click a card to see details.</p>
           </div>
 
-          <div className="balances-grid-horizontal">
-            {loading ? (
-              <p className="text-muted">Loading balances...</p>
-            ) : Object.keys(balances).length === 0 ? (
-              <div className="empty-state-mini">
-                <div style={{ fontSize: "2rem" }}>🎉</div>
-                <p>You're all settled up! No outstanding balances.</p>
-              </div>
-            ) : (
-              Object.keys(balances).map((userId) => {
-                const b = balances[userId];
-                const isOwed = b.owesYou && b.owesYou > 0;
-                const isDebt = b.youOwe && b.youOwe > 0;
-                
-                return (
-                  <div 
-                    key={userId} 
-                    className={`balance-card-mini ${isOwed ? "owes-you-card" : isDebt ? "you-owe-card" : ""}`}
-                    onClick={() => setSelectedUser({ id: userId, name: b.name })}
-                  >
-                    <div className="balance-header">
-                      <div className="avatar-small">
-                        {b.name ? b.name.charAt(0).toUpperCase() : "?"}
-                      </div>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <h4 style={{ margin: 0, fontSize: "1rem" }}>{b.name}</h4>
-                        {b.owesYou && <span className="text-success" style={{ fontSize: "0.9rem", fontWeight: 600 }}>owes you ₹{b.owesYou}</span>}
-                        {b.youOwe && <span className="text-danger" style={{ fontSize: "0.9rem", fontWeight: 600 }}>you owe ₹{b.youOwe}</span>}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
+          {loading ? (
+            <p className="text-muted" style={{ padding: "1rem" }}>Loading balances...</p>
+          ) : Object.keys(balances).length === 0 ? (
+            <div className="empty-state-mini">
+              <p>You're all settled up! No outstanding balances.</p>
+            </div>
+          ) : (
+            <MagicBento 
+              data={bentoData}
+              enableTilt={true}
+              enableMagnetism={true}
+              clickEffect={true}
+              glowColor="132, 0, 255"
+            />
+          )}
         </div>
 
         {/* Groups Section */}

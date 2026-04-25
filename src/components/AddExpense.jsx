@@ -50,7 +50,7 @@ export default function AddExpense({ token, groups, refresh }) {
 
   return (
     <div className="action-form" style={{ border: "none", padding: 0, background: "transparent" }}>
-      <h3>💸 Add Expense</h3>
+      <h3>Add Expense</h3>
       <p className="text-muted" style={{ fontSize: "0.9rem", marginBottom: "1.5rem" }}>Split a new bill with friends.</p>
       
       <div className="input-group">
@@ -81,10 +81,10 @@ export default function AddExpense({ token, groups, refresh }) {
           onChange={(e) => setSelectedGroupId(e.target.value)}
           style={{ fontWeight: 600, color: selectedGroupId ? "var(--primary)" : "inherit" }}
         >
-          <option value="">👤 Personal / Direct Split</option>
+          <option value="">Personal / Direct Split</option>
           <optgroup label="Your Groups">
             {groups.map(g => (
-              <option key={g._id} value={g._id}>👥 {g.name}</option>
+              <option key={g._id} value={g._id}>{g.name}</option>
             ))}
           </optgroup>
         </select>

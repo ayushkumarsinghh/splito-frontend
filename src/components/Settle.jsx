@@ -101,7 +101,7 @@ export default function Settle({ token, refresh }) {
 
   return (
     <div className="action-form" style={{ border: "none", padding: 0, background: "transparent" }}>
-      <h3>🤝 Settle Up</h3>
+      <h3>Settle Up</h3>
       <p className="text-muted" style={{ fontSize: "0.9rem", marginBottom: "1.5rem" }}>Pay back what you owe.</p>
 
       <div className="input-group">
@@ -143,7 +143,7 @@ export default function Settle({ token, refresh }) {
       {/* Pending Requests Section */}
       {pendingRequests.length > 0 && (
         <div style={{ marginTop: "1rem" }}>
-          <h4 style={{ marginBottom: "1rem" }}>🔔 Pending Confirmations</h4>
+          <h4 style={{ marginBottom: "1rem" }}>Pending Confirmations</h4>
           {pendingRequests.map(req => (
             <div key={req._id} style={{ background: "rgba(255,255,255,0.05)", padding: "1rem", borderRadius: "8px", marginBottom: "0.5rem", border: "1px solid var(--border-color)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
