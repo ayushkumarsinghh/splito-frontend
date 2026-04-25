@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import SplitText from "./SplitText/SplitText";
 
 export default function Landing({ setPage }) {
   return (
@@ -16,7 +17,14 @@ export default function Landing({ setPage }) {
           </nav>
 
           <div className="hero-main">
-            <h1 className="hero-title">SPLIT EXPENSES<br />WITH EASE</h1>
+            <SplitText
+              text="SPLIT EXPENSES WITH EASE"
+              className="hero-title"
+              delay={40}
+              animationSpeed={1.5}
+              showCallback={false}
+              textAlign="center"
+            />
             <p className="hero-subtitle">
               The smartest way to track balances and settle up with your friends.
               No more awkward "you owe me" texts.

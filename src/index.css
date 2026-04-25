@@ -100,7 +100,7 @@ h2 {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
   z-index: 1;
 }
 
@@ -114,7 +114,7 @@ h2 {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   z-index: 0;
@@ -678,7 +678,7 @@ h2 {
 .hero-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: transparent;
 }
 
 .hero-content {
@@ -928,9 +928,11 @@ h2 {
 
 /* Footer */
 .landing-footer {
-  background-color: #125E8A;
+  background-color: #2A1E36;
   padding: 4rem 5%;
   color: white;
+  position: relative;
+  z-index: 2;
 }
 
 .footer-content {
