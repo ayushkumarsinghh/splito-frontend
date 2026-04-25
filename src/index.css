@@ -787,7 +787,7 @@ h2 {
 
 /* USP Banner */
 .usp-banner {
-  background-color: white;
+  background-color: transparent;
   padding: 4rem 5%;
   text-align: center;
   display: flex;
@@ -797,7 +797,7 @@ h2 {
 }
 
 .usp-banner h2 {
-  color: #222;
+  color: white;
   font-size: 2rem;
   max-width: 800px;
 }
@@ -816,13 +816,13 @@ h2 {
 /* Features Grid */
 .features-section {
   padding: 5rem 5%;
-  background-color: #F4F4F4;
+  background-color: transparent;
 }
 
 .section-title {
   text-align: center;
   font-size: 2.5rem;
-  color: #222;
+  color: white;
   margin-bottom: 3rem;
   font-family: 'Outfit', sans-serif;
 }
@@ -836,10 +836,13 @@ h2 {
 }
 
 .feature-card {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   transition: transform 0.3s;
 }
 
@@ -859,13 +862,13 @@ h2 {
 }
 
 .feature-card h3 {
-  color: #125E8A;
+  color: #a855f7;
   font-size: 1.5rem;
   margin: 1.5rem 1.5rem 0.5rem;
 }
 
 .feature-card p {
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   padding: 0 1.5rem 1.5rem;
   font-size: 1rem;
 }
@@ -873,7 +876,7 @@ h2 {
 /* Testimonials Section */
 .testimonials-section {
   padding: 5rem 5%;
-  background-color: white;
+  background-color: transparent;
 }
 
 .text-dark {
@@ -889,7 +892,10 @@ h2 {
 }
 
 .testimonial-card {
-  background-color: #F4F4F4;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 2.5rem;
   border-radius: 12px;
   position: relative;
@@ -907,7 +913,7 @@ h2 {
 }
 
 .testimonial-card p {
-  color: #444;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1.1rem;
   font-style: italic;
   position: relative;
@@ -916,7 +922,7 @@ h2 {
 }
 
 .testimonial-card h4 {
-  color: #125E8A;
+  color: #a855f7;
   font-size: 1.1rem;
 }
 
