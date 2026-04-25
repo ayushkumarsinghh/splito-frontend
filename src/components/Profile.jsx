@@ -69,7 +69,7 @@ export default function Profile({ token, onBack }) {
   return (
     <div className="glass-panel slide-up">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
-        <h2 style={{ margin: 0 }}>👤 Your Profile</h2>
+        <h2 style={{ margin: 0, color: "var(--text-primary)" }}>👤 Your Profile</h2>
         <button className="btn btn-outline btn-sm" onClick={onBack} style={{ width: "auto" }}>
           Back to Dashboard
         </button>
