@@ -7,7 +7,7 @@ import ExpenseHistory from "./ExpenseHistory";
 import UserSummary from "./UserSummary";
 import Groups from "./Groups";
 import Profile from "./Profile";
-import MagicBento from "./MagicBento/MagicBento";
+import BentoPanel from "./MagicBento/BentoPanel";
 
 export default function Dashboard({ token, setToken }) {
   const [activeView, setActiveView] = useState("dashboard");
@@ -50,29 +50,6 @@ export default function Dashboard({ token, setToken }) {
     }
   };
 
-  // Format balances for MagicBento
-  const bentoData = Object.keys(balances).map(userId => {
-    const b = balances[userId];
-    const isOwed = b.owesYou && b.owesYou > 0;
-    const isDebt = b.youOwe && b.youOwe > 0;
-
-    return {
-      label: "Balance Detail",
-      title: b.name,
-      description: isOwed ? `Owes you ₹${b.owesYou}` : isDebt ? `You owe ₹${b.youOwe}` : "All settled up",
-      color: "#120F17",
-      onClick: () => setSelectedUser({ id: userId, name: b.name }),
-      style: {
-        border: `1px solid ${isOwed ? "rgba(34, 197, 94, 0.3)" : isDebt ? "rgba(239, 68, 68, 0.3)" : "var(--border-color)"}`
-      },
-      headerRight: (
-        <div className="avatar-small">
-          {b.name ? b.name.charAt(0).toUpperCase() : "?"}
-        </div>
-      )
-    };
-  });
-
   return (
     <div className="dashboard-bg fade-in">
       <div className="dashboard-wrapper">
@@ -109,7 +86,7 @@ export default function Dashboard({ token, setToken }) {
         ) : (
           <>
             {/* Top Section: Balances */}
-            <div className="glass-panel" style={{ marginBottom: "2rem", padding: "1rem" }}>
+            <BentoPanel className="glass-panel" style={{ marginBottom: "2rem", padding: "1.5rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1rem", padding: "0 1rem" }}>
             <h2 style={{ fontSize: "1.8rem", color: "var(--primary)", margin: 0 }}>Your Balances</h2>
             <p className="text-muted">Click a card to see details.</p>
@@ -122,41 +99,67 @@ export default function Dashboard({ token, setToken }) {
               <p>You're all settled up! No outstanding balances.</p>
             </div>
           ) : (
-            <MagicBento 
-              data={bentoData}
-              enableTilt={true}
-              enableMagnetism={true}
-              clickEffect={true}
-              glowColor="132, 0, 255"
-            />
+            <div className="balances-grid-horizontal">
+              {Object.keys(balances).map((userId) => {
+                const b = balances[userId];
+                const isOwed = b.owesYou && b.owesYou > 0;
+                const isDebt = b.youOwe && b.youOwe > 0;
+                
+                return (
+                  <BentoPanel 
+                    key={userId} 
+                    className="balance-card-mini"
+                    style={{ 
+                      minWidth: "250px", 
+                      padding: "1.25rem",
+                      border: `1px solid ${isOwed ? "rgba(34, 197, 94, 0.3)" : isDebt ? "rgba(239, 68, 68, 0.3)" : "rgba(255,255,255,0.1)"}`
+                    }}
+                    glowColor={isOwed ? "34, 197, 94" : isDebt ? "239, 68, 68" : "132, 0, 255"}
+                    onClick={() => setSelectedUser({ id: userId, name: b.name })}
+                  >
+                    <div className="balance-header" style={{ marginBottom: 0 }}>
+                      <div className="avatar-small">
+                        {b.name ? b.name.charAt(0).toUpperCase() : "?"}
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <h4 style={{ margin: 0, fontSize: "1rem", color: "white" }}>{b.name}</h4>
+                        {isOwed && <span className="text-success" style={{ fontSize: "0.9rem", fontWeight: 600 }}>owes you ₹{b.owesYou}</span>}
+                        {isDebt && <span className="text-danger" style={{ fontSize: "0.9rem", fontWeight: 600 }}>you owe ₹{b.youOwe}</span>}
+                        {!isOwed && !isDebt && <span className="text-muted" style={{ fontSize: "0.9rem" }}>Settled up</span>}
+                      </div>
+                    </div>
+                  </BentoPanel>
+                );
+              })}
+            </div>
           )}
-        </div>
+        </BentoPanel>
 
         {/* Groups Section */}
-        <div className="glass-panel" style={{ marginBottom: "2rem" }}>
+        <BentoPanel className="glass-panel" style={{ marginBottom: "2rem", padding: "1.5rem" }}>
           <Groups token={token} groups={groups} refreshDashboard={fetchDashboardData} />
-        </div>
+        </BentoPanel>
 
         {/* Main Content Grid */}
         <div className="dashboard-layout-grid">
           {/* Left Column: Add Expense -> History */}
           <div className="layout-col">
-            <div className="glass-panel">
+            <BentoPanel className="glass-panel" style={{ padding: "1.5rem" }}>
               <AddExpense token={token} groups={groups} refresh={fetchDashboardData} />
-            </div>
-            <div className="glass-panel">
+            </BentoPanel>
+            <BentoPanel className="glass-panel" style={{ padding: "1.5rem" }}>
               <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
-            </div>
+            </BentoPanel>
           </div>
 
           {/* Right Column: Settle Up -> Recent Activity */}
           <div className="layout-col">
-            <div className="glass-panel">
+            <BentoPanel className="glass-panel" style={{ padding: "1.5rem" }}>
               <Settle token={token} refresh={fetchDashboardData} />
-            </div>
-            <div className="glass-panel">
+            </BentoPanel>
+            <BentoPanel className="glass-panel" style={{ padding: "1.5rem" }}>
               <RecentActivity token={token} refreshTrigger={refreshTrigger} />
-            </div>
+            </BentoPanel>
           </div>
         </div>
         </>

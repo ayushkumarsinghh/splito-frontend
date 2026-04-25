@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BentoPanel from "./MagicBento/BentoPanel";
 
 export default function Login({ setToken, setPage }) {
   const [email, setEmail] = useState("");
@@ -49,50 +50,52 @@ export default function Login({ setToken, setPage }) {
           {theme === "light" ? "Dark" : "Light"}
         </button>
       </div>
-      <div className="glass-panel auth-card">
-        <h2 className="text-gradient" style={{ textAlign: "center" }}>Welcome Back</h2>
-        <p className="text-muted" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-          Log in to continue settling up.
-        </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
+        <BentoPanel className="auth-card" style={{ maxWidth: "440px", padding: "2.5rem" }}>
+          <h2 className="text-gradient" style={{ textAlign: "center" }}>Welcome Back</h2>
+          <p className="text-muted" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+            Log in to continue settling up.
+          </p>
 
-        <div className="input-group">
-          <label className="input-label">Email Address</label>
-          <input
-            className="input-field"
-            placeholder="name@example.com"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="input-group">
-          <label className="input-label">Password</label>
-          <input
-            className="input-field"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        {error && (
-          <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
-            {error}
+          <div className="input-group">
+            <label className="input-label">Email Address</label>
+            <input
+              className="input-field"
+              placeholder="name@example.com"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
-        )}
 
-        <button className="btn btn-primary" onClick={login} disabled={loading} style={{ marginTop: "0.5rem" }}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
+          <div className="input-group">
+            <label className="input-label">Password</label>
+            <input
+              className="input-field"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-        <p style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)" }}>
-          Don't have an account?{" "}
-          <span className="clickable-link" onClick={() => setPage("signup")}>
-            Sign up
-          </span>
-        </p>
+          {error && (
+            <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
+              {error}
+            </div>
+          )}
+
+          <button className="btn btn-primary" onClick={login} disabled={loading} style={{ marginTop: "0.5rem" }}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+
+          <p style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)" }}>
+            Don't have an account?{" "}
+            <span className="clickable-link" onClick={() => setPage("signup")}>
+              Sign up
+            </span>
+          </p>
+        </BentoPanel>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import BentoPanel from "./MagicBento/BentoPanel";
 
 export default function Signup({ setPage }) {
   const [username, setUsername] = useState("");
@@ -55,66 +56,68 @@ export default function Signup({ setPage }) {
           {theme === "light" ? "Dark" : "Light"}
         </button>
       </div>
-      <div className="glass-panel auth-card">
-        <h2 className="text-gradient" style={{ textAlign: "center" }}>Create Account</h2>
-        <p className="text-muted" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-          Join Splito to easily track expenses.
-        </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
+        <BentoPanel className="auth-card" style={{ maxWidth: "440px", padding: "2.5rem" }}>
+          <h2 className="text-gradient" style={{ textAlign: "center" }}>Create Account</h2>
+          <p className="text-muted" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+            Join Splito to easily track expenses.
+          </p>
 
-        <div className="input-group">
-          <label className="input-label">Username</label>
-          <input
-            className="input-field"
-            placeholder="johndoe"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-
-        <div className="input-group">
-          <label className="input-label">Email Address</label>
-          <input
-            className="input-field"
-            placeholder="name@example.com"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="input-group">
-          <label className="input-label">Password</label>
-          <input
-            className="input-field"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        {error && (
-          <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
-            {error}
+          <div className="input-group">
+            <label className="input-label">Username</label>
+            <input
+              className="input-field"
+              placeholder="johndoe"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </div>
-        )}
 
-        {success && (
-          <div className="text-success" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
-            {success}
+          <div className="input-group">
+            <label className="input-label">Email Address</label>
+            <input
+              className="input-field"
+              placeholder="name@example.com"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
-        )}
 
-        <button className="btn btn-primary" onClick={signup} disabled={loading} style={{ marginTop: "0.5rem" }}>
-          {loading ? "Creating..." : "Sign Up"}
-        </button>
+          <div className="input-group">
+            <label className="input-label">Password</label>
+            <input
+              className="input-field"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-        <p style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)" }}>
-          Already have an account?{" "}
-          <span className="clickable-link" onClick={() => setPage("login")}>
-            Login
-          </span>
-        </p>
+          {error && (
+            <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="text-success" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
+              {success}
+            </div>
+          )}
+
+          <button className="btn btn-primary" onClick={signup} disabled={loading} style={{ marginTop: "0.5rem" }}>
+            {loading ? "Creating..." : "Sign Up"}
+          </button>
+
+          <p style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)" }}>
+            Already have an account?{" "}
+            <span className="clickable-link" onClick={() => setPage("login")}>
+              Login
+            </span>
+          </p>
+        </BentoPanel>
       </div>
     </div>
   );
