@@ -186,8 +186,8 @@ export default function Groups({ token, groups, refreshDashboard }) {
                 </div>
               </div>
               <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                <button 
-                  className="btn btn-outline btn-danger" 
+                <button
+                  className="btn btn-outline btn-danger"
                   onClick={handleLeaveGroup}
                   style={{ width: "auto", padding: "0.5rem 1rem", fontSize: "0.85rem" }}
                 >
