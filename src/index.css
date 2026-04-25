@@ -48,8 +48,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-primary);
+  background-color: #0a0a0a;
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
@@ -93,9 +92,7 @@ h2 {
   align-items: center;
   min-height: 100vh;
   padding: 2rem;
-  background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1920&q=80');
-  background-size: cover;
-  background-position: center;
+  background: transparent;
   position: relative;
 }
 
@@ -103,16 +100,13 @@ h2 {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
 .dashboard-bg {
   min-height: 100vh;
-  background-image: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1920&q=80');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background: transparent;
   position: relative;
 }
 
@@ -120,9 +114,9 @@ h2 {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--dash-overlay);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   z-index: 0;
 }
 
@@ -157,11 +151,13 @@ h2 {
 
 /* Cards & Containers */
 .glass-panel {
-  background: var(--panel-bg);
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1.25rem;
   padding: 2.5rem;
-  box-shadow: var(--panel-shadow);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -663,8 +659,8 @@ h2 {
 .landing-container {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  background-color: white;
-  color: #222;
+  background-color: transparent;
+  color: white;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
@@ -674,9 +670,7 @@ h2 {
   position: relative;
   height: 90vh;
   min-height: 600px;
-  background-image: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=1920&q=80');
-  background-size: cover;
-  background-position: center;
+  background: transparent;
   display: flex;
   flex-direction: column;
 }
