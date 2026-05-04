@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { ArrowLeft } from "lucide-react";
 
 export default function Signup({ setPage }) {
   const [username, setUsername] = useState("");
@@ -25,12 +26,22 @@ export default function Signup({ setPage }) {
 
   return (
     <div className="auth-container fade-in">
-      <div className="card auth-card">
-        <div className="logo-container" style={{ justifyContent: "center", marginBottom: "24px" }}>
+      <nav className="auth-nav">
+        <div className="logo-container" onClick={() => setPage("landing")} style={{ cursor: "pointer", margin: 0 }}>
           <div className="logo-icon">S</div>
           <div className="logo-text">Splito</div>
         </div>
+        <div 
+          className="footer-link" 
+          onClick={() => setPage("landing")} 
+          style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontWeight: 500 }}
+        >
+          <ArrowLeft size={18} />
+          Back to Home
+        </div>
+      </nav>
 
+      <div className="card auth-card">
         <h2 style={{ textAlign: "center", marginBottom: "8px", fontFamily: 'Outfit' }}>Create Account</h2>
         <p style={{ textAlign: "center", color: "var(--text-secondary)", marginBottom: "32px", fontSize: "0.95rem" }}>
           Start tracking shared expenses with clarity.

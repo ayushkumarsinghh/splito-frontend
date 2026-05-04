@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { ArrowLeft } from "lucide-react";
 
 export default function Login({ setToken, setPage }) {
   const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ export default function Login({ setToken, setPage }) {
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-      const res = await axios.post(`${API_URL}/api/login`, { email, password });
+      const res = await axios.post(`${API_URL}/api/users/login`, { email, password });
       localStorage.setItem("token", res.data.token);
       setToken(res.data.token);
     } catch (err) {
@@ -25,60 +26,68 @@ export default function Login({ setToken, setPage }) {
 
   return (
     <div className="auth-container fade-in">
-      <div className="card" style={{ maxWidth: "420px", width: "100%", padding: "40px" }}>
-        <div className="auth-header">
-           <div className="auth-badge">Secure Access</div>
-           <div 
-             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", marginBottom: "8px", cursor: "pointer" }}
-             onClick={() => setPage("landing")}
-           >
-              <div className="logo-small">S</div>
-              <div className="logo">Splito</div>
-           </div>
-           <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>Enter your details to access your dashboard</p>
+      <nav className="auth-nav">
+        <div className="logo-container" onClick={() => setPage("landing")} style={{ cursor: "pointer", margin: 0 }}>
+          <div className="logo-icon">S</div>
+          <div className="logo-text">Splito</div>
         </div>
+        <div 
+          className="footer-link" 
+          onClick={() => setPage("landing")} 
+          style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", fontWeight: 500 }}
+        >
+          <ArrowLeft size={18} />
+          Back to Home
+        </div>
+      </nav>
+
+      <div className="card auth-card">
+        <h2 style={{ textAlign: "center", marginBottom: "8px", fontFamily: 'Outfit' }}>Welcome Back</h2>
+        <p style={{ textAlign: "center", color: "var(--text-secondary)", marginBottom: "32px", fontSize: "0.95rem" }}>
+          Log in to manage your shared expenses.
+        </p>
 
         <form onSubmit={login}>
           <div className="form-group">
-            <label className="input-label">Email</label>
-            <input 
-              className="input-field" 
-              type="email" 
-              placeholder="e.g. alex@example.com" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+            <label className="input-label">Email Address</label>
+            <input
+              className="input-field"
+              type="email"
+              placeholder="name@company.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-
-          <div className="form-group">
+          <div className="form-group" style={{ marginTop: "16px" }}>
             <label className="input-label">Password</label>
-            <input 
-              className="input-field" 
-              type="password" 
-              placeholder="••••••••" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
+            <input
+              className="input-field"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
 
           {error && (
-            <div style={{ backgroundColor: "rgba(248, 113, 113, 0.08)", border: "1px solid rgba(248, 113, 113, 0.15)", padding: "10px", borderRadius: "8px", marginBottom: "20px", color: "#f87171", fontSize: "0.8rem", textAlign: "center" }}>
+            <div style={{ color: "var(--danger)", fontSize: "0.85rem", marginTop: "16px", textAlign: "center", padding: "8px", background: "rgba(239, 68, 68, 0.1)", borderRadius: "8px" }}>
               {error}
             </div>
           )}
 
-          <button className="btn btn-primary" type="submit" disabled={loading} style={{ marginTop: "8px" }}>
+          <button className="btn btn-primary" type="submit" disabled={loading} style={{ width: "100%", marginTop: "32px", padding: "14px" }}>
             {loading ? "Authenticating..." : "Sign in to Dashboard"}
           </button>
         </form>
 
-        <div style={{ marginTop: "24px", textAlign: "center" }}>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
-            Don't have an account? <span style={{ color: "var(--primary)", cursor: "pointer", fontWeight: 600 }} onClick={() => setPage("signup")}>Sign up</span>
-          </p>
-        </div>
+        <p style={{ textAlign: "center", marginTop: "24px", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+          New to Splito?{" "}
+          <span className="footer-link" style={{ color: "var(--primary)", cursor: "pointer", fontWeight: 600 }} onClick={() => setPage("signup")}>
+            Create account
+          </span>
+        </p>
       </div>
     </div>
   );

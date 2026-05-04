@@ -4,7 +4,8 @@ import {
   Shield, 
   Activity, 
   ArrowRight, 
-  Code
+  ChevronRight,
+  Globe
 } from "lucide-react";
 
 export default function Landing({ setPage }) {
@@ -14,21 +15,25 @@ export default function Landing({ setPage }) {
     <div className="landing-page fade-in">
       {/* 🏠 Navigation */}
       <nav className="landing-nav">
-        <div className="logo-container">
+        <div className="logo-container" style={{ margin: 0 }}>
           <div className="logo-icon">S</div>
           <div className="logo-text">Splito</div>
         </div>
         <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
           <span 
             className="footer-link" 
-            style={{ cursor: "pointer", fontWeight: 500 }} 
+            style={{ cursor: "pointer", fontWeight: 600, fontSize: "0.95rem" }} 
             onClick={() => setPage("login")}
           >
             Login
           </span>
-          <button className="btn btn-primary" onClick={() => setPage("signup")}>
+          <button 
+            className="btn btn-primary" 
+            onClick={() => setPage("signup")}
+            style={{ padding: "10px 20px" }}
+          >
             Get Started
-            <ArrowRight size={18} style={{ marginLeft: "4px" }} />
+            <ChevronRight size={16} style={{ marginLeft: "6px" }} />
           </button>
         </div>
       </nav>
@@ -36,11 +41,27 @@ export default function Landing({ setPage }) {
       {/* 🚀 Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Shared expenses, finally simplified.</h1>
+          <div style={{ 
+            display: "inline-flex", 
+            alignItems: "center", 
+            gap: "8px", 
+            padding: "8px 16px", 
+            background: "var(--primary-glow)", 
+            borderRadius: "100px", 
+            color: "var(--primary)", 
+            fontSize: "0.85rem", 
+            fontWeight: 600,
+            marginBottom: "32px",
+            border: "1px solid rgba(99, 102, 241, 0.2)"
+          }}>
+            <Globe size={14} />
+            <span>Now in Early Access</span>
+          </div>
+          <h1>Shared expenses,<br />finally simplified.</h1>
           <p className="hero-subtitle">
             The most clear-cut way to split bills, track balances, and settle debts with friends—all in one premium dashboard.
           </p>
-          <div className="hero-btns" style={{ marginBottom: "64px" }}>
+          <div className="hero-btns">
             <button className="btn btn-primary" onClick={() => setPage("signup")} style={{ padding: "16px 32px", fontSize: "1.1rem" }}>
               Start for Free
             </button>
@@ -51,14 +72,15 @@ export default function Landing({ setPage }) {
 
           {/* 🖥️ Product Preview */}
           <div className="preview-container fade-in" style={{ 
-            marginTop: "40px", 
+            marginTop: "80px", 
             borderRadius: "24px", 
-            padding: "12px", 
-            background: "rgba(255,255,255,0.05)", 
+            padding: "10px", 
+            background: "rgba(255,255,255,0.03)", 
             border: "1px solid var(--border)",
             boxShadow: "0 40px 100px rgba(0,0,0,0.6)",
-            maxWidth: "1100px",
-            margin: "0 auto"
+            maxWidth: "1000px",
+            margin: "0 auto",
+            position: "relative"
           }}>
             <img 
               src={previewImage} 
@@ -66,7 +88,8 @@ export default function Landing({ setPage }) {
               style={{ 
                 width: "100%", 
                 borderRadius: "16px", 
-                display: "block"
+                display: "block",
+                border: "1px solid rgba(255,255,255,0.05)"
               }} 
             />
           </div>
@@ -74,16 +97,16 @@ export default function Landing({ setPage }) {
       </section>
 
       {/* 🛠️ Features Section */}
-      <section className="features-section">
+      <section className="features-section" style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ marginBottom: "64px" }}>
-          <h2 style={{ fontSize: "3rem", fontFamily: 'Outfit', marginBottom: "16px" }}>Everything you need</h2>
+          <h2 style={{ fontSize: "2.5rem", fontFamily: 'Outfit', fontWeight: 800, marginBottom: "16px" }}>Everything you need</h2>
           <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>Three steps to total financial clarity.</p>
         </div>
         
         <div className="features-grid">
           <div className="card feature-card">
             <div className="feature-icon">
-              <Zap size={28} />
+              <Zap size={24} />
             </div>
             <h3>Quick Entry</h3>
             <p>Log any cost, from dinner to rent, and assign it to a group or friend instantly with our optimized entry system.</p>
@@ -91,7 +114,7 @@ export default function Landing({ setPage }) {
 
           <div className="card feature-card">
             <div className="feature-icon">
-              <Shield size={28} />
+              <Shield size={24} />
             </div>
             <h3>Settle Securely</h3>
             <p>Our settlement engine handles the math perfectly. Choose equal splits or custom amounts with one click.</p>
@@ -99,7 +122,7 @@ export default function Landing({ setPage }) {
 
           <div className="card feature-card">
             <div className="feature-icon">
-              <Activity size={28} />
+              <Activity size={24} />
             </div>
             <h3>Deep Insights</h3>
             <p>Track real-time balances and historical trends to see exactly where your money goes across all your groups.</p>
@@ -109,28 +132,17 @@ export default function Landing({ setPage }) {
 
       {/* 👣 Footer */}
       <footer className="footer">
-        <div className="footer-top">
-          <div className="footer-brand">
-            <div className="logo-container" style={{ marginBottom: "16px" }}>
-              <div className="logo-icon">S</div>
-              <div className="logo-text">Splito</div>
-            </div>
-            <p style={{ color: "var(--text-secondary)", maxWidth: "300px" }}>
-              Built for financial clarity and seamless group settlements.
-            </p>
+        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+          <div className="logo-container" style={{ justifyContent: "center", margin: "0 0 24px 0" }}>
+            <div className="logo-icon">S</div>
+            <div className="logo-text">Splito</div>
           </div>
-          <div className="footer-links">
-            <a href="https://github.com/ayushkumarsinghh" target="_blank" rel="noopener noreferrer" className="footer-link">
-              <Code size={20} style={{ marginRight: "8px" }} />
-              GitHub
-            </a>
-            <a href="#" className="footer-link">Terms</a>
-            <a href="#" className="footer-link">Privacy</a>
-          </div>
+          <p style={{ color: "var(--text-secondary)", maxWidth: "400px", margin: "0 auto" }}>
+            Built for financial clarity and seamless group settlements.
+          </p>
         </div>
-        <div className="footer-bottom" style={{ marginTop: "40px", paddingTop: "40px", borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
-          <p>© 2026 Splito. Made with ❤️ by Ayush Kumar Singh.</p>
-          <p>Version 2.0.0 (Premium Upgrade)</p>
+        <div className="footer-bottom" style={{ marginTop: "40px", paddingTop: "40px", borderTop: "1px solid var(--border)", textAlign: "center", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+          <p>© 2026 Splito. All rights reserved.</p>
         </div>
       </footer>
     </div>
