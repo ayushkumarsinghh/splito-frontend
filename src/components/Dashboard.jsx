@@ -1,5 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { 
+  LayoutDashboard, 
+  Receipt, 
+  Users, 
+  Activity, 
+  User, 
+  Settings, 
+  LogOut, 
+  Plus, 
+  TrendingUp,
+  TrendingDown
+} from "lucide-react";
 import AddExpense from "./AddExpense";
 import Settle from "./Settle";
 import RecentActivity from "./RecentActivity";
@@ -13,13 +25,12 @@ export default function Dashboard({ token, setToken }) {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [error, setError] = useState("");
   const [username, setUsername] = useState("User");
 
   useEffect(() => {
     fetchDashboardData();
     fetchProfile();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, token]);
 
   const fetchProfile = async () => {
     try {
@@ -32,7 +43,6 @@ export default function Dashboard({ token, setToken }) {
   };
 
   const fetchDashboardData = async () => {
-    setError("");
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
       const [balancesRes, groupsRes] = await Promise.all([
@@ -41,68 +51,58 @@ export default function Dashboard({ token, setToken }) {
       ]);
       setBalances(balancesRes.data.balances || {});
       setGroups(groupsRes.data || []);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to load dashboard data");
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { console.error(err);
+    } finally { setLoading(false); }
   };
 
   const totalOwedToYou = Object.values(balances).reduce((acc, curr) => acc + (curr.owesYou || 0), 0);
   const totalYouOwe = Object.values(balances).reduce((acc, curr) => acc + (curr.youOwe || 0), 0);
 
+  const NavItem = ({ id, icon: Icon, label }) => (
+    <div 
+      className={`nav-link ${activeView === id ? "active" : ""}`} 
+      onClick={() => setActiveView(id)}
+    >
+      <Icon size={20} />
+      <span>{label}</span>
+    </div>
+  );
+
   return (
     <div className="dashboard-layout fade-in">
-      {/* Sidebar - No Emojis */}
       <aside className="sidebar">
-        <div className="logo-container" style={{ marginBottom: "var(--s-48)" }}>
+        <div className="logo-container">
           <div className="logo-icon">S</div>
           <div className="logo-text">Splito</div>
         </div>
+        
         <nav className="nav-links">
-          <div className={`nav-link ${activeView === "dashboard" ? "active" : ""}`} onClick={() => setActiveView("dashboard")}>
-             <span className="icon">#</span> <span>Dashboard</span>
-          </div>
-          <div className={`nav-link ${activeView === "expenses" ? "active" : ""}`} onClick={() => setActiveView("expenses")}>
-             <span className="icon">$</span> <span>Expenses</span>
-          </div>
-          <div className={`nav-link ${activeView === "groups" ? "active" : ""}`} onClick={() => setActiveView("groups")}>
-             <span className="icon">@</span> <span>Groups</span>
-          </div>
-          <div className={`nav-link ${activeView === "activity" ? "active" : ""}`} onClick={() => setActiveView("activity")}>
-             <span className="icon">%</span> <span>Activity</span>
-          </div>
-          <div className={`nav-link ${activeView === "profile" ? "active" : ""}`} onClick={() => setActiveView("profile")}>
-             <span className="icon">*</span> <span>Profile</span>
-          </div>
-          <div className="nav-link">
-             <span className="icon">&</span> <span>Settings</span>
-          </div>
+          <NavItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
+          <NavItem id="expenses" icon={Receipt} label="Expenses" />
+          <NavItem id="groups" icon={Users} label="Groups" />
+          <NavItem id="activity" icon={Activity} label="Activity" />
+          <NavItem id="profile" icon={User} label="Profile" />
+          <NavItem id="settings" icon={Settings} label="Settings" />
         </nav>
         
         <div style={{ marginTop: "auto" }}>
-          <div 
-            className="nav-link" 
-            onClick={() => {
-              localStorage.removeItem("token");
-              setToken(null);
-            }}
-          >
+          <div className="nav-link" onClick={() => { localStorage.removeItem("token"); setToken(null); }}>
+            <LogOut size={20} />
             <span>Logout</span>
           </div>
         </div>
       </aside>
 
-      {/* Main Content Area */}
       <main className="main-content">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--s-48)" }}>
-           <h2 style={{ fontSize: "2rem" }}>Welcome back, {username}</h2>
-           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-              <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "var(--surface-hover)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
-                {username.charAt(0).toUpperCase()}
-              </div>
+        <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "48px" }}>
+           <div>
+             <h2 style={{ fontSize: "2.5rem", fontFamily: 'Outfit' }}>Welcome back, {username}</h2>
+             <p style={{ color: "var(--text-secondary)" }}>Here's what's happening with your expenses.</p>
            </div>
-        </div>
+           <div className="avatar-circle" style={{ width: "48px", height: "48px", borderRadius: "14px", background: "var(--primary-glow)", border: "1px solid var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
+             {username.charAt(0).toUpperCase()}
+           </div>
+        </header>
 
         {activeView === "profile" ? (
           <Profile token={token} onBack={() => setActiveView("dashboard")} />
@@ -114,29 +114,39 @@ export default function Dashboard({ token, setToken }) {
           <>
             <div className="balance-grid">
               <div className="balance-card owe-card">
-                <span className="balance-label">You Owe</span>
-                <div className="balance-value">INR {totalYouOwe.toLocaleString()}</div>
-                <p className="balance-subtext">Outstanding debts to friends</p>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span className="balance-label">You Owe</span>
+                  <TrendingDown color="var(--danger)" />
+                </div>
+                <div className="balance-value">₹{totalYouOwe.toLocaleString()}</div>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>Total outstanding debts</p>
               </div>
+              
               <div className="balance-card owed-card">
-                <span className="balance-label">You Are Owed</span>
-                <div className="balance-value">INR {totalOwedToYou.toLocaleString()}</div>
-                <p className="balance-subtext">Payments pending from groups</p>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span className="balance-label">You Are Owed</span>
+                  <TrendingUp color="var(--success)" />
+                </div>
+                <div className="balance-value">₹{totalOwedToYou.toLocaleString()}</div>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>Pending from your groups</p>
               </div>
             </div>
 
-            <div className="section-header">
-              <h3 style={{ fontSize: "1.5rem" }}>Recent Expenses</h3>
-              <button className="btn btn-primary" onClick={() => setActiveView("expenses")}>+ Add New Expense</button>
+            <div className="section-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+              <h3 style={{ fontSize: "1.75rem", fontFamily: 'Outfit' }}>Recent Activity</h3>
+              <button className="btn btn-primary" onClick={() => setActiveView("expenses")}>
+                <Plus size={18} style={{ marginRight: "8px" }} />
+                Add Expense
+              </button>
             </div>
 
             <RecentActivity token={token} refreshTrigger={refreshTrigger} />
 
-            <div style={{ marginTop: "var(--s-48)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--s-24)" }}>
-               <div className="balance-card" style={{ background: "transparent", borderStyle: "dashed" }}>
+            <div style={{ marginTop: "48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+               <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
                   <AddExpense token={token} groups={groups} refresh={() => setRefreshTrigger(p => p + 1)} />
                </div>
-               <div className="balance-card" style={{ background: "transparent", borderStyle: "dashed" }}>
+               <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
                   <Settle token={token} refresh={() => setRefreshTrigger(p => p + 1)} />
                </div>
             </div>
