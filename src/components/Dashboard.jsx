@@ -77,19 +77,19 @@ export default function Dashboard({ token, setToken }) {
 
     return (
       <div className="fade-in" style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px solid var(--border)" }}>
-        <h4 style={{ fontSize: "0.9rem", color: "var(--text-secondary)", marginBottom: "16px", textTransform: "uppercase" }}>
+        <h4 style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
           Breakdown
         </h4>
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {list.length === 0 ? (
              <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>No debts found.</p>
           ) : list.map((item, i) => (
             <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "var(--surface-hover)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.7rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "var(--surface-hover)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700 }}>
                   {item.user.charAt(0).toUpperCase()}
                 </div>
-                <span style={{ fontSize: "1rem", fontWeight: 500 }}>{item.user}</span>
+                <span style={{ fontSize: "0.95rem", fontWeight: 500 }}>{item.user}</span>
               </div>
               <span style={{ fontWeight: 700, color: isOwe ? "var(--danger)" : "var(--success)" }}>
                 ₹{item.amount.toLocaleString()}
@@ -102,11 +102,11 @@ export default function Dashboard({ token, setToken }) {
   };
 
   const QuickActions = () => (
-    <div style={{ marginBottom: "48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-      <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
+    <div style={{ marginBottom: "48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+      <div className="balance-card">
         <AddExpense token={token} groups={groups} refresh={() => setRefreshTrigger(p => p + 1)} />
       </div>
-      <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
+      <div className="balance-card">
         <Settle token={token} refresh={() => setRefreshTrigger(p => p + 1)} />
       </div>
     </div>
@@ -138,10 +138,10 @@ export default function Dashboard({ token, setToken }) {
       <main className="main-content">
         <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "48px" }}>
            <div>
-             <h2 style={{ fontSize: "2.5rem", fontFamily: 'Outfit' }}>Welcome back, {username}</h2>
-             <p style={{ color: "var(--text-secondary)" }}>Here's what's happening with your expenses.</p>
+             <h2 style={{ fontSize: "2.25rem", fontFamily: 'Outfit', fontWeight: 700 }}>Welcome, {username}</h2>
+             <p style={{ color: "var(--text-secondary)" }}>Your financial overview for today.</p>
            </div>
-           <div className="avatar-circle" style={{ width: "48px", height: "48px", borderRadius: "14px", background: "var(--primary-glow)", border: "1px solid var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
+           <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "var(--primary-glow)", border: "1px solid var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", color: "var(--primary)" }}>
              {username.charAt(0).toUpperCase()}
            </div>
         </header>
@@ -151,27 +151,23 @@ export default function Dashboard({ token, setToken }) {
         ) : activeView === "groups" ? (
           <Groups token={token} groups={groups} refreshDashboard={() => setRefreshTrigger(p => p + 1)} />
         ) : activeView === "activity" ? (
-          <>
-            <QuickActions />
-            <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
-          </>
+          <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
         ) : (
           <>
-            <QuickActions />
-
-            <div className="balance-grid" style={{ marginBottom: "48px" }}>
+            {/* 🔝 Balances at the top */}
+            <div className="balance-grid" style={{ marginBottom: "48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
               <div 
                 className={`balance-card owe-card ${expandedCard === 'owe' ? 'expanded' : ''}`}
                 onClick={() => setExpandedCard(expandedCard === 'owe' ? null : 'owe')}
                 style={{ cursor: "pointer" }}
               >
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span className="balance-label">You Owe</span>
-                  <TrendingDown color="var(--danger)" />
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                  <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.05em" }}>You Owe</span>
+                  <TrendingDown size={18} color="var(--danger)" />
                 </div>
-                <div className="balance-value">₹{totalYouOwe.toLocaleString()}</div>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
-                  {expandedCard === 'owe' ? "Click to collapse" : "Total outstanding debts • Click to expand"}
+                <div className="balance-value" style={{ fontSize: "2rem", fontWeight: 800, fontFamily: 'Outfit' }}>₹{totalYouOwe.toLocaleString()}</div>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem", marginTop: "4px" }}>
+                  {expandedCard === 'owe' ? "Click to collapse" : "Total debts • Click to expand"}
                 </p>
                 {expandedCard === 'owe' && <BalanceDetailList type="owe" />}
               </div>
@@ -181,21 +177,24 @@ export default function Dashboard({ token, setToken }) {
                 onClick={() => setExpandedCard(expandedCard === 'owed' ? null : 'owed')}
                 style={{ cursor: "pointer" }}
               >
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span className="balance-label">You Are Owed</span>
-                  <TrendingUp color="var(--success)" />
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                  <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.05em" }}>You are owed</span>
+                  <TrendingUp size={18} color="var(--success)" />
                 </div>
-                <div className="balance-value">₹{totalOwedToYou.toLocaleString()}</div>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
-                  {expandedCard === 'owed' ? "Click to collapse" : "Pending from your groups • Click to expand"}
+                <div className="balance-value" style={{ fontSize: "2rem", fontWeight: 800, fontFamily: 'Outfit' }}>₹{totalOwedToYou.toLocaleString()}</div>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem", marginTop: "4px" }}>
+                  {expandedCard === 'owed' ? "Click to collapse" : "Total pending • Click to expand"}
                 </p>
                 {expandedCard === 'owed' && <BalanceDetailList type="owed" />}
               </div>
             </div>
 
+            {/* ⚡ Quick Actions below balances */}
+            <QuickActions />
+
             <div className="section-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-              <h3 style={{ fontSize: "1.75rem", fontFamily: 'Outfit' }}>Recent Activity</h3>
-              <button className="btn btn-primary" onClick={() => setActiveView("activity")}>
+              <h3 style={{ fontSize: "1.5rem", fontFamily: 'Outfit', fontWeight: 700 }}>Recent Activity</h3>
+              <button className="btn btn-outline" onClick={() => setActiveView("activity")} style={{ padding: "8px 16px" }}>
                 View All
               </button>
             </div>
