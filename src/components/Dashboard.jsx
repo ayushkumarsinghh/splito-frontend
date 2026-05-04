@@ -2,13 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { 
   LayoutDashboard, 
-  Receipt, 
   Users, 
   Activity, 
-  User, 
   Settings, 
   LogOut, 
-  Plus, 
   TrendingUp, 
   TrendingDown 
 } from "lucide-react";
@@ -104,6 +101,17 @@ export default function Dashboard({ token, setToken }) {
     );
   };
 
+  const QuickActions = () => (
+    <div style={{ marginBottom: "48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+      <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
+        <AddExpense token={token} groups={groups} refresh={() => setRefreshTrigger(p => p + 1)} />
+      </div>
+      <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
+        <Settle token={token} refresh={() => setRefreshTrigger(p => p + 1)} />
+      </div>
+    </div>
+  );
+
   return (
     <div className="dashboard-layout fade-in">
       <aside className="sidebar">
@@ -143,10 +151,15 @@ export default function Dashboard({ token, setToken }) {
         ) : activeView === "groups" ? (
           <Groups token={token} groups={groups} refreshDashboard={() => setRefreshTrigger(p => p + 1)} />
         ) : activeView === "activity" ? (
-          <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
+          <>
+            <QuickActions />
+            <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
+          </>
         ) : (
           <>
-            <div className="balance-grid">
+            <QuickActions />
+
+            <div className="balance-grid" style={{ marginBottom: "48px" }}>
               <div 
                 className={`balance-card owe-card ${expandedCard === 'owe' ? 'expanded' : ''}`}
                 onClick={() => setExpandedCard(expandedCard === 'owe' ? null : 'owe')}
@@ -178,15 +191,6 @@ export default function Dashboard({ token, setToken }) {
                 </p>
                 {expandedCard === 'owed' && <BalanceDetailList type="owed" />}
               </div>
-            </div>
-
-            <div style={{ marginBottom: "48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-               <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
-                  <AddExpense token={token} groups={groups} refresh={() => setRefreshTrigger(p => p + 1)} />
-               </div>
-               <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
-                  <Settle token={token} refresh={() => setRefreshTrigger(p => p + 1)} />
-               </div>
             </div>
 
             <div className="section-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>

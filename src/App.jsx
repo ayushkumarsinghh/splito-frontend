@@ -37,7 +37,11 @@ export default function App() {
         aria-label="Toggle Theme"
         title={`Switch to ${theme === "dark" ? "Light" : "Night"} Mode`}
       >
-        {theme === "dark" ? <Sun size={24} /> : <Moon size={24} />}
+        {theme === "dark" ? (
+          <Sun size={20} strokeWidth={2.5} />
+        ) : (
+          <Moon size={20} strokeWidth={2.5} />
+        )}
       </button>
     </div>
   );
