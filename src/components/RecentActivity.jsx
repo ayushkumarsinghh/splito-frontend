@@ -23,44 +23,55 @@ export default function RecentActivity({ token, refreshTrigger }) {
     fetchActivity();
   }, [token, refreshTrigger]);
 
-  if (loading) return <p className="text-muted">Loading activity...</p>;
+  if (loading) return <p className="text-secondary" style={{ padding: "var(--s-24)" }}>Loading expenses...</p>;
 
   return (
-    <div className="activity-feed">
-      <h3 style={{ marginBottom: "1.5rem", fontSize: "1.4rem", color: "var(--primary)" }}>Recent Activity</h3>
+    <div className="recent-expenses-list">
       {activity.length === 0 ? (
-        <p className="text-muted">No recent activity.</p>
-      ) : (
-        <div className="activity-list">
-          {activity.map((item) => (
-            <div key={item.id} className="activity-item">
-              <div className="activity-icon">
-                {item.type === "expense" ? "●" : "○"}
-              </div>
-              <div className="activity-details">
-                {item.type === "expense" ? (
-                  <p>
-                    <strong>{item.isPayer ? "You" : item.paidBy}</strong> added "
-                    <strong>{item.description}</strong>"
-                    {item.groupName && <span> in <strong>{item.groupName}</strong></span>}
-                    <br />
-                    <span className="activity-amount">₹{item.amount}</span>
-                  </p>
-                ) : (
-                  <p>
-                    <strong>{item.isFromMe ? "You" : item.from}</strong> paid{" "}
-                    <strong>{item.isFromMe ? item.to : "you"}</strong>
-                    <br />
-                    <span className="activity-amount">₹{item.amount}</span>
-                  </p>
-                )}
-                <span className="activity-time">
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-          ))}
+        <div style={{ padding: "var(--s-32)", textAlign: "center", color: "var(--text-secondary)" }}>
+          No recent expenses found.
         </div>
+      ) : (
+        activity.map((item) => (
+          <div key={item.id} className="expense-row">
+            <div className="expense-avatar">
+              {item.type === "expense" ? "🏔️" : "💸"}
+            </div>
+            
+            <div className="expense-info">
+              {item.type === "expense" ? (
+                <>
+                  <h4>{item.description}</h4>
+                  <p>{item.groupName || "Personal"} • Paid by {item.isPayer ? "You" : item.paidBy}</p>
+                </>
+              ) : (
+                <>
+                  <h4>Settlement</h4>
+                  <p>{item.isFromMe ? `You paid ${item.to}` : `${item.from} paid you`}</p>
+                </>
+              )}
+            </div>
+
+            <div className="expense-date">
+              {new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </div>
+
+            <div className="expense-total">
+              ₹{item.amount.toLocaleString()}
+            </div>
+
+            <div className="expense-share">
+              <label>Your Share</label>
+              {item.type === "expense" ? (
+                <span className={item.isPayer ? "text-success" : "text-danger"}>
+                  {item.isPayer ? "+" : "-"}₹{(item.amount / 2).toLocaleString()}
+                </span>
+              ) : (
+                <span className="text-success">Settled</span>
+              )}
+            </div>
+          </div>
+        ))
       )}
     </div>
   );
