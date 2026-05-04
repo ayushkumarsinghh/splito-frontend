@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import BentoPanel from "./MagicBento/BentoPanel";
 
 export default function Signup({ setPage }) {
   const [username, setUsername] = useState("");
@@ -8,116 +7,94 @@ export default function Signup({ setPage }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.body.className = newTheme === "dark" ? "dark-theme" : "";
-  };
-
-  useEffect(() => {
-    document.body.className = theme === "dark" ? "dark-theme" : "";
-  }, []);
-
-  const signup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
     setError("");
-    setSuccess("");
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-      await axios.post(`${API_URL}/api/signup`, {
-        username,
-        email,
-        password,
-      });
-
-      setSuccess("Account created successfully! Redirecting...");
-      setTimeout(() => {
-        setPage("login");
-      }, 1500);
+      await axios.post(`${API_URL}/api/register`, { username, email, password });
+      alert("Welcome to Splito! Please log in to start splitting.");
+      setPage("login");
     } catch (err) {
-      console.log(err.response?.data);
-      setError(err.response?.data?.message || "Signup failed");
+      setError(err.response?.data?.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="page-wrapper fade-in">
-      <div style={{ position: "absolute", top: "2rem", left: "2rem", right: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 1000 }}>
-        <button onClick={() => setPage("landing")} className="btn-back" style={{ position: "static" }}>
-          ← Back to Home
-        </button>
-        <button className="btn btn-outline" onClick={toggleTheme} style={{ width: "auto", padding: "0.6rem 1.2rem", background: "var(--panel-bg)", backdropFilter: "blur(10px)" }}>
-          {theme === "light" ? "Dark" : "Light"}
-        </button>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
-        <BentoPanel className="auth-card" style={{ maxWidth: "440px", padding: "2.5rem" }}>
-          <h2 className="text-gradient" style={{ textAlign: "center" }}>Create Account</h2>
-          <p className="text-muted" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-            Join Splito to easily track expenses.
-          </p>
+    <div className="auth-container fade-in">
+      <div className="card" style={{ maxWidth: "420px", width: "100%", padding: "40px" }}>
+        <div className="auth-header">
+           <div className="auth-badge">Early Access</div>
+           <div 
+             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", marginBottom: "8px", cursor: "pointer" }}
+             onClick={() => setPage("landing")}
+           >
+              <div className="logo-small">S</div>
+              <div className="logo">Splito</div>
+           </div>
+           <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>Create your account and simplify your shared life</p>
+        </div>
 
-          <div className="input-group">
+        <form onSubmit={handleSignup}>
+          <div className="form-group">
             <label className="input-label">Username</label>
-            <input
-              className="input-field"
-              placeholder="johndoe"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+            <input 
+              className="input-field" 
+              type="text" 
+              placeholder="e.g. janesmith" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+              required
             />
           </div>
 
-          <div className="input-group">
+          <div className="form-group">
             <label className="input-label">Email Address</label>
-            <input
-              className="input-field"
-              placeholder="name@example.com"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+            <input 
+              className="input-field" 
+              type="email" 
+              placeholder="e.g. jane@example.com" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required
             />
           </div>
 
-          <div className="input-group">
+          <div className="form-group">
             <label className="input-label">Password</label>
-            <input
-              className="input-field"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+            <input 
+              className="input-field" 
+              type="password" 
+              placeholder="Min. 8 characters" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required
             />
           </div>
 
           {error && (
-            <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
+            <div style={{ backgroundColor: "rgba(248, 113, 113, 0.08)", border: "1px solid rgba(248, 113, 113, 0.15)", padding: "10px", borderRadius: "8px", marginBottom: "20px", color: "#f87171", fontSize: "0.8rem", textAlign: "center" }}>
               {error}
             </div>
           )}
 
-          {success && (
-            <div className="text-success" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
-              {success}
-            </div>
-          )}
-
-          <button className="btn btn-primary" onClick={signup} disabled={loading} style={{ marginTop: "0.5rem" }}>
-            {loading ? "Creating..." : "Sign Up"}
+          <button className="btn btn-primary" type="submit" disabled={loading} style={{ marginTop: "8px" }}>
+            {loading ? "Preparing your dashboard..." : "Join the Community"}
           </button>
+        </form>
 
-          <p style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)" }}>
-            Already have an account?{" "}
-            <span className="clickable-link" onClick={() => setPage("login")}>
-              Login
-            </span>
+        <div style={{ marginTop: "24px", textAlign: "center" }}>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+            Already a member? <span style={{ color: "var(--primary)", cursor: "pointer", fontWeight: 600 }} onClick={() => setPage("login")}>Sign in</span>
           </p>
-        </BentoPanel>
+          <div style={{ marginTop: "24px", paddingTop: "24px", borderTop: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", color: "var(--text-secondary)", fontSize: "0.75rem" }}>
+             <span>No spam. Secure authentication guaranteed.</span>
+          </div>
+        </div>
       </div>
     </div>
   );

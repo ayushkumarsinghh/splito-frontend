@@ -1,101 +1,84 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import BentoPanel from "./MagicBento/BentoPanel";
 
 export default function Login({ setToken, setPage }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.body.className = newTheme === "dark" ? "dark-theme" : "";
-  };
-
-  useEffect(() => {
-    document.body.className = theme === "dark" ? "dark-theme" : "";
-  }, []);
-
-  const login = async () => {
+  const login = async (e) => {
+    e.preventDefault();
     setError("");
     setLoading(true);
     try {
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-      const res = await axios.post(`${API_URL}/api/login`, {
-        email,
-        password,
-      });
-
+      const res = await axios.post(`${API_URL}/api/login`, { email, password });
       localStorage.setItem("token", res.data.token);
       setToken(res.data.token);
     } catch (err) {
-      console.log(err.response?.data);
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || "Invalid credentials. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="page-wrapper fade-in">
-      <div style={{ position: "absolute", top: "2rem", left: "2rem", right: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center", zIndex: 1000 }}>
-        <button onClick={() => setPage("landing")} className="btn-back" style={{ position: "static" }}>
-          ← Back to Home
-        </button>
-        <button className="btn btn-outline" onClick={toggleTheme} style={{ width: "auto", padding: "0.6rem 1.2rem", background: "var(--panel-bg)", backdropFilter: "blur(10px)" }}>
-          {theme === "light" ? "Dark" : "Light"}
-        </button>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
-        <BentoPanel className="auth-card" style={{ maxWidth: "440px", padding: "2.5rem" }}>
-          <h2 className="text-gradient" style={{ textAlign: "center" }}>Welcome Back</h2>
-          <p className="text-muted" style={{ textAlign: "center", marginBottom: "2.5rem" }}>
-            Log in to continue settling up.
-          </p>
+    <div className="auth-container fade-in">
+      <div className="card" style={{ maxWidth: "420px", width: "100%", padding: "40px" }}>
+        <div className="auth-header">
+           <div className="auth-badge">Secure Access</div>
+           <div 
+             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", marginBottom: "8px", cursor: "pointer" }}
+             onClick={() => setPage("landing")}
+           >
+              <div className="logo-small">S</div>
+              <div className="logo">Splito</div>
+           </div>
+           <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>Enter your details to access your dashboard</p>
+        </div>
 
-          <div className="input-group">
-            <label className="input-label">Email Address</label>
-            <input
-              className="input-field"
-              placeholder="name@example.com"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+        <form onSubmit={login}>
+          <div className="form-group">
+            <label className="input-label">Email</label>
+            <input 
+              className="input-field" 
+              type="email" 
+              placeholder="e.g. alex@example.com" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required
             />
           </div>
 
-          <div className="input-group">
+          <div className="form-group">
             <label className="input-label">Password</label>
-            <input
-              className="input-field"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+            <input 
+              className="input-field" 
+              type="password" 
+              placeholder="••••••••" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required
             />
           </div>
 
           {error && (
-            <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.9rem", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
+            <div style={{ backgroundColor: "rgba(248, 113, 113, 0.08)", border: "1px solid rgba(248, 113, 113, 0.15)", padding: "10px", borderRadius: "8px", marginBottom: "20px", color: "#f87171", fontSize: "0.8rem", textAlign: "center" }}>
               {error}
             </div>
           )}
 
-          <button className="btn btn-primary" onClick={login} disabled={loading} style={{ marginTop: "0.5rem" }}>
-            {loading ? "Logging in..." : "Login"}
+          <button className="btn btn-primary" type="submit" disabled={loading} style={{ marginTop: "8px" }}>
+            {loading ? "Authenticating..." : "Sign in to Dashboard"}
           </button>
+        </form>
 
-          <p style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)" }}>
-            Don't have an account?{" "}
-            <span className="clickable-link" onClick={() => setPage("signup")}>
-              Sign up
-            </span>
+        <div style={{ marginTop: "24px", textAlign: "center" }}>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+            Don't have an account? <span style={{ color: "var(--primary)", cursor: "pointer", fontWeight: 600 }} onClick={() => setPage("signup")}>Sign up</span>
           </p>
-        </BentoPanel>
+        </div>
       </div>
     </div>
   );
