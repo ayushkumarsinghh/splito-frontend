@@ -4,32 +4,32 @@ import AddExpense from "./AddExpense";
 import Settle from "./Settle";
 import RecentActivity from "./RecentActivity";
 import ExpenseHistory from "./ExpenseHistory";
-import UserSummary from "./UserSummary";
 import Groups from "./Groups";
 import Profile from "./Profile";
-import BentoPanel from "./MagicBento/BentoPanel";
 
 export default function Dashboard({ token, setToken }) {
   const [activeView, setActiveView] = useState("dashboard");
   const [balances, setBalances] = useState({});
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [selectedUser, setSelectedUser] = useState(null);
   const [error, setError] = useState("");
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.body.className = newTheme === "dark" ? "dark-theme" : "";
-  };
+  const [username, setUsername] = useState("User");
 
   useEffect(() => {
-    document.body.className = theme === "dark" ? "dark-theme" : "";
     fetchDashboardData();
-  }, []);
+    fetchProfile();
+  }, [refreshTrigger]);
+
+  const fetchProfile = async () => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const res = await axios.get(`${API_URL}/api/users/profile`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUsername(res.data.username);
+    } catch (err) { console.error(err); }
+  };
 
   const fetchDashboardData = async () => {
     setError("");
@@ -41,148 +41,108 @@ export default function Dashboard({ token, setToken }) {
       ]);
       setBalances(balancesRes.data.balances || {});
       setGroups(groupsRes.data || []);
-      setRefreshTrigger(prev => prev + 1);
     } catch (err) {
-      console.log(err);
       setError(err.response?.data?.message || "Failed to load dashboard data");
     } finally {
       setLoading(false);
     }
   };
 
+  const totalOwedToYou = Object.values(balances).reduce((acc, curr) => acc + (curr.owesYou || 0), 0);
+  const totalYouOwe = Object.values(balances).reduce((acc, curr) => acc + (curr.youOwe || 0), 0);
+
   return (
-    <div className="dashboard-bg fade-in">
-      <div className="dashboard-wrapper">
-        <BentoPanel 
-          className="navbar" 
-          style={{ marginBottom: "3rem" }}
-          contentStyle={{ 
-            display: "flex", 
-            justifyContent: "space-between", 
-            alignItems: "center",
-            padding: "1rem 2rem",
-            width: "100%"
-          }}
-        >
-          <div className="logo"><span style={{ color: "var(--primary)" }}>Splito</span></div>
-          <div style={{ display: "flex", gap: "1rem" }}>
-            <button className="btn btn-outline" onClick={() => setActiveView(activeView === "dashboard" ? "profile" : "dashboard")} style={{ padding: "0.5rem 1rem", width: "auto" }}>
-              {activeView === "dashboard" ? "Profile" : "Dashboard"}
-            </button>
-            <button className="btn btn-outline" onClick={toggleTheme} style={{ padding: "0.5rem 1rem", width: "auto" }}>
-              {theme === "light" ? "Dark" : "Light"}
-            </button>
-            <button
-              className="btn btn-danger"
-              onClick={() => {
-                localStorage.removeItem("token");
-                setToken(null);
-              }}
-            >
-              Logout
-            </button>
+    <div className="dashboard-layout fade-in">
+      {/* Sidebar - No Emojis */}
+      <aside className="sidebar">
+        <div className="logo-container" style={{ marginBottom: "var(--s-48)" }}>
+          <div className="logo-icon">S</div>
+          <div className="logo-text">Splito</div>
+        </div>
+        <nav className="nav-links">
+          <div className={`nav-link ${activeView === "dashboard" ? "active" : ""}`} onClick={() => setActiveView("dashboard")}>
+             <span className="icon">#</span> <span>Dashboard</span>
           </div>
-        </BentoPanel>
+          <div className={`nav-link ${activeView === "expenses" ? "active" : ""}`} onClick={() => setActiveView("expenses")}>
+             <span className="icon">$</span> <span>Expenses</span>
+          </div>
+          <div className={`nav-link ${activeView === "groups" ? "active" : ""}`} onClick={() => setActiveView("groups")}>
+             <span className="icon">@</span> <span>Groups</span>
+          </div>
+          <div className={`nav-link ${activeView === "activity" ? "active" : ""}`} onClick={() => setActiveView("activity")}>
+             <span className="icon">%</span> <span>Activity</span>
+          </div>
+          <div className={`nav-link ${activeView === "profile" ? "active" : ""}`} onClick={() => setActiveView("profile")}>
+             <span className="icon">*</span> <span>Profile</span>
+          </div>
+          <div className="nav-link">
+             <span className="icon">&</span> <span>Settings</span>
+          </div>
+        </nav>
         
-        {error && (
-          <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "1rem", borderRadius: "1rem", marginBottom: "2rem", textAlign: "center", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
-            {error}
+        <div style={{ marginTop: "auto" }}>
+          <div 
+            className="nav-link" 
+            onClick={() => {
+              localStorage.removeItem("token");
+              setToken(null);
+            }}
+          >
+            <span>Logout</span>
           </div>
-        )}
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="main-content">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--s-48)" }}>
+           <h2 style={{ fontSize: "2rem" }}>Welcome back, {username}</h2>
+           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+              <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "var(--surface-hover)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
+                {username.charAt(0).toUpperCase()}
+              </div>
+           </div>
+        </div>
 
         {activeView === "profile" ? (
           <Profile token={token} onBack={() => setActiveView("dashboard")} />
+        ) : activeView === "groups" ? (
+          <Groups token={token} groups={groups} refreshDashboard={() => setRefreshTrigger(p => p + 1)} />
+        ) : activeView === "expenses" || activeView === "activity" ? (
+          <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
         ) : (
           <>
-            {/* Top Section: Balances */}
-            <BentoPanel className="glass-panel" style={{ marginBottom: "2rem", padding: "1.5rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "1rem", padding: "0 1rem" }}>
-            <h2 style={{ fontSize: "1.8rem", color: "var(--primary)", margin: 0 }}>Your Balances</h2>
-            <p className="text-muted">Click a card to see details.</p>
-          </div>
-
-          {loading ? (
-            <p className="text-muted" style={{ padding: "1rem" }}>Loading balances...</p>
-          ) : Object.keys(balances).length === 0 ? (
-            <div className="empty-state-mini">
-              <p>You're all settled up! No outstanding balances.</p>
+            <div className="balance-grid">
+              <div className="balance-card owe-card">
+                <span className="balance-label">You Owe</span>
+                <div className="balance-value">INR {totalYouOwe.toLocaleString()}</div>
+                <p className="balance-subtext">Outstanding debts to friends</p>
+              </div>
+              <div className="balance-card owed-card">
+                <span className="balance-label">You Are Owed</span>
+                <div className="balance-value">INR {totalOwedToYou.toLocaleString()}</div>
+                <p className="balance-subtext">Payments pending from groups</p>
+              </div>
             </div>
-          ) : (
-            <div className="balances-grid-horizontal">
-              {Object.keys(balances).map((userId) => {
-                const b = balances[userId];
-                const isOwed = b.owesYou && b.owesYou > 0;
-                const isDebt = b.youOwe && b.youOwe > 0;
-                
-                return (
-                  <BentoPanel 
-                    key={userId} 
-                    className="balance-card-mini"
-                    style={{ 
-                      minWidth: "250px", 
-                      padding: "1.25rem",
-                      border: `1px solid ${isOwed ? "rgba(34, 197, 94, 0.3)" : isDebt ? "rgba(239, 68, 68, 0.3)" : "rgba(255,255,255,0.1)"}`
-                    }}
-                    glowColor={isOwed ? "34, 197, 94" : isDebt ? "239, 68, 68" : "132, 0, 255"}
-                    onClick={() => setSelectedUser({ id: userId, name: b.name })}
-                  >
-                    <div className="balance-header" style={{ marginBottom: 0 }}>
-                      <div className="avatar-small">
-                        {b.name ? b.name.charAt(0).toUpperCase() : "?"}
-                      </div>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <h4 style={{ margin: 0, fontSize: "1rem", color: "var(--text-primary)" }}>{b.name}</h4>
-                        {isOwed && <span className="text-success" style={{ fontSize: "0.9rem", fontWeight: 600 }}>owes you ₹{b.owesYou}</span>}
-                        {isDebt && <span className="text-danger" style={{ fontSize: "0.9rem", fontWeight: 600 }}>you owe ₹{b.youOwe}</span>}
-                        {!isOwed && !isDebt && <span className="text-muted" style={{ fontSize: "0.9rem" }}>Settled up</span>}
-                      </div>
-                    </div>
-                  </BentoPanel>
-                );
-              })}
+
+            <div className="section-header">
+              <h3 style={{ fontSize: "1.5rem" }}>Recent Expenses</h3>
+              <button className="btn btn-primary" onClick={() => setActiveView("expenses")}>+ Add New Expense</button>
             </div>
-          )}
-        </BentoPanel>
 
-        {/* Groups Section */}
-        <BentoPanel className="glass-panel" style={{ marginBottom: "2rem", padding: "1.5rem" }}>
-          <Groups token={token} groups={groups} refreshDashboard={fetchDashboardData} />
-        </BentoPanel>
+            <RecentActivity token={token} refreshTrigger={refreshTrigger} />
 
-        {/* Main Content Grid */}
-        <div className="dashboard-layout-grid">
-          {/* Left Column: Add Expense -> History */}
-          <div className="layout-col">
-            <BentoPanel className="glass-panel" style={{ padding: "1.5rem" }}>
-              <AddExpense token={token} groups={groups} refresh={fetchDashboardData} />
-            </BentoPanel>
-            <BentoPanel className="glass-panel" style={{ padding: "1.5rem" }}>
-              <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
-            </BentoPanel>
-          </div>
-
-          {/* Right Column: Settle Up -> Recent Activity */}
-          <div className="layout-col">
-            <BentoPanel className="glass-panel" style={{ padding: "1.5rem" }}>
-              <Settle token={token} refresh={fetchDashboardData} />
-            </BentoPanel>
-            <BentoPanel className="glass-panel" style={{ padding: "1.5rem" }}>
-              <RecentActivity token={token} refreshTrigger={refreshTrigger} />
-            </BentoPanel>
-          </div>
-        </div>
-        </>
+            <div style={{ marginTop: "var(--s-48)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--s-24)" }}>
+               <div className="balance-card" style={{ background: "transparent", borderStyle: "dashed" }}>
+                  <AddExpense token={token} groups={groups} refresh={() => setRefreshTrigger(p => p + 1)} />
+               </div>
+               <div className="balance-card" style={{ background: "transparent", borderStyle: "dashed" }}>
+                  <Settle token={token} refresh={() => setRefreshTrigger(p => p + 1)} />
+               </div>
+            </div>
+          </>
         )}
-      </div>
-
-      {selectedUser && (
-        <UserSummary 
-          token={token} 
-          userId={selectedUser.id} 
-          userName={selectedUser.name} 
-          onClose={() => setSelectedUser(null)} 
-        />
-      )}
+      </main>
     </div>
   );
 }
