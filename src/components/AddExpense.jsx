@@ -1,47 +1,46 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 export default function AddExpense({ token, groups, refresh }) {
-  const [amount, setAmount] = useState("");
-  const [participants, setParticipants] = useState("");
-  const [paidByUsername, setPaidByUsername] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedGroupId, setSelectedGroupId] = useState("");
+  const [amount, setAmount] = useState("");
+  const [groupId, setGroupId] = useState("");
+  const [splitWith, setSplitWith] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-  const add = async () => {
+  const addExpense = async (e) => {
+    e.preventDefault();
     setError("");
-    if (!amount || (!participants && !selectedGroupId)) {
-      setError("Please fill amount and participants (or select a group)");
+    if (!description || !amount) {
+      setError("Please fill in all required fields.");
       return;
     }
+
     setLoading(true);
     try {
       await axios.post(
-        `${API_URL}/api/expense`,
+        `${API_URL}/api/expenses`,
         {
+          description,
           amount: Number(amount),
-          description: description || "Expense",
-          participants: participants ? participants.split(",").map(id => id.trim()) : undefined,
-          paidByUsername: paidByUsername.trim() || undefined,
-          groupId: selectedGroupId || undefined
+          groupId: groupId || null,
+          splitWith: groupId ? [] : splitWith, // If group, server handles split. Else use provided members.
         },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      setAmount("");
-      setParticipants("");
-      setPaidByUsername("");
       setDescription("");
-      setSelectedGroupId("");
+      setAmount("");
+      setGroupId("");
+      setSplitWith([]);
       refresh();
+      alert("Expense added successfully!");
     } catch (err) {
-      console.log(err.response?.data);
       setError(err.response?.data?.message || "Failed to add expense");
     } finally {
       setLoading(false);
@@ -49,77 +48,67 @@ export default function AddExpense({ token, groups, refresh }) {
   };
 
   return (
-    <div className="action-form" style={{ border: "none", padding: 0, background: "transparent" }}>
+    <div className="add-expense-form">
       <h3>Add Expense</h3>
-      <p className="text-muted" style={{ fontSize: "0.9rem", marginBottom: "1.5rem" }}>Split a new bill with friends.</p>
-      
-      <div className="input-group">
-        <label className="input-label">Who paid? (Optional Username)</label>
-        <input
-          className="input-field"
-          placeholder="Leave blank for you"
-          value={paidByUsername}
-          onChange={(e) => setPaidByUsername(e.target.value)}
-        />
-      </div>
+      <p className="text-meta" style={{ marginBottom: "var(--s-16)" }}>Log a new shared cost.</p>
 
-      <div className="input-group">
-        <label className="input-label">Description</label>
-        <input
-          className="input-field"
-          placeholder="What was it for?"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
-
-      <div className="input-group">
-        <label className="input-label">Expense Category / Group</label>
-        <select
-          className="input-field"
-          value={selectedGroupId}
-          onChange={(e) => setSelectedGroupId(e.target.value)}
-          style={{ fontWeight: 600, color: selectedGroupId ? "var(--primary)" : "inherit" }}
-        >
-          <option value="">Personal / Direct Split</option>
-          <optgroup label="Your Groups">
-            {groups.map(g => (
-              <option key={g._id} value={g._id}>{g.name}</option>
-            ))}
-          </optgroup>
-        </select>
-      </div>
-
-      <div className="input-group">
-        <label className="input-label">Amount (₹)</label>
-        <input
-          className="input-field"
-          placeholder="e.g. 500"
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-      </div>
-
-      <div className="input-group">
-        <label className="input-label">Usernames (comma separated)</label>
-        <input
-          className="input-field"
-          placeholder={selectedGroupId ? "Optional for groups" : "johndoe, janedoe"}
-          value={participants}
-          onChange={(e) => setParticipants(e.target.value)}
-        />
-      </div>
-
-      {error && (
-        <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
-          {error}
+      <form onSubmit={addExpense} style={{ display: "flex", flexDirection: "column", gap: "var(--s-16)" }}>
+        <div className="form-group">
+          <label className="input-label">Description</label>
+          <input
+            className="input-field"
+            placeholder="e.g. Dinner, Movie, Groceries"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
         </div>
-      )}
 
-      <button className="btn btn-primary" onClick={add} disabled={loading}>
-        {loading ? "Adding..." : "Add Expense"}
-      </button>
+        <div className="form-group">
+          <label className="input-label">Amount (₹)</label>
+          <input
+            className="input-field"
+            placeholder="0.00"
+            type="number"
+            step="0.01"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="input-label">Group (Optional)</label>
+          <select
+            className="input-field"
+            value={groupId}
+            onChange={(e) => setGroupId(e.target.value)}
+            style={{ appearance: "none" }}
+          >
+            <option value="">Personal / No Group</option>
+            {groups.map((g) => (
+              <option key={g._id} value={g._id}>
+                {g.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {error && (
+          <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+            {error}
+          </div>
+        )}
+
+        <button 
+          type="submit" 
+          className="btn btn-primary" 
+          disabled={loading}
+          style={{ width: "100%", marginTop: "var(--s-8)" }}
+        >
+          {loading ? "Adding..." : "Add Expense"}
+        </button>
+      </form>
     </div>
   );
 }
