@@ -33,7 +33,7 @@ export default function RecentActivity({ token, refreshTrigger }) {
           <p style={{ color: "var(--text-secondary)" }}>No recent activity to show.</p>
         </div>
       ) : (
-        activity.map((item) => (
+        activity.slice(0, 3).map((item) => (
           <div key={item.id} className="expense-row">
             <div className="expense-icon">
               {item.type === "expense" ? <CreditCard size={20} /> : <ArrowUpRight size={20} />}

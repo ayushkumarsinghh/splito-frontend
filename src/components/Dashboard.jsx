@@ -73,8 +73,8 @@ export default function Dashboard({ token, setToken }) {
     const isOwe = type === 'owe';
     const list = Object.entries(balances)
       .filter(([_, val]) => isOwe ? val.youOwe > 0 : val.owesYou > 0)
-      .map(([user, val]) => ({
-        user,
+      .map(([_, val]) => ({
+        user: val.name || "Unknown User",
         amount: isOwe ? val.youOwe : val.owesYou
       }));
 
@@ -114,10 +114,8 @@ export default function Dashboard({ token, setToken }) {
         
         <nav className="nav-links">
           <NavItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
-          <NavItem id="expenses" icon={Receipt} label="Expenses" />
           <NavItem id="groups" icon={Users} label="Groups" />
           <NavItem id="activity" icon={Activity} label="Activity" />
-          <NavItem id="profile" icon={User} label="Profile" />
           <NavItem id="settings" icon={Settings} label="Settings" />
         </nav>
         
@@ -140,11 +138,11 @@ export default function Dashboard({ token, setToken }) {
            </div>
         </header>
 
-        {activeView === "profile" || activeView === "settings" ? (
+        {activeView === "settings" ? (
           <Profile token={token} onBack={() => setActiveView("dashboard")} />
         ) : activeView === "groups" ? (
           <Groups token={token} groups={groups} refreshDashboard={() => setRefreshTrigger(p => p + 1)} />
-        ) : activeView === "expenses" || activeView === "activity" ? (
+        ) : activeView === "activity" ? (
           <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
         ) : (
           <>
