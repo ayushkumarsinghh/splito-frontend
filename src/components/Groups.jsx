@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import axios from "axios";
-import BentoPanel from "./MagicBento/BentoPanel";
 
 export default function Groups({ token, groups, refreshDashboard }) {
   const [showCreate, setShowCreate] = useState(false);
@@ -24,80 +23,33 @@ export default function Groups({ token, groups, refreshDashboard }) {
         headers: { Authorization: `Bearer ${token}` },
       });
       setInvites(res.data);
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) { console.error(err); }
   };
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
     if (!newGroupName) return;
     try {
-      await axios.post(
-        `${API_URL}/api/groups`,
-        { name: newGroupName },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.post(`${API_URL}/api/groups`, { name: newGroupName }, { headers: { Authorization: `Bearer ${token}` } });
       setNewGroupName("");
       setShowCreate(false);
       refreshDashboard();
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to create group");
-    }
+    } catch (err) { setError(err.response?.data?.message || "Failed to create group"); }
   };
 
   const handleRespondInvite = async (inviteId, status) => {
     try {
-      await axios.post(
-        `${API_URL}/api/invites/${inviteId}/respond`,
-        { status },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.post(`${API_URL}/api/invites/${inviteId}/respond`, { status }, { headers: { Authorization: `Bearer ${token}` } });
       fetchInvites();
       refreshDashboard();
-    } catch (err) {
-      setError("Failed to respond to invite");
-    }
-  };
-
-  const handleInvite = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(
-        `${API_URL}/api/groups/${selectedGroup._id}/invite`,
-        { username: inviteUsername },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setInviteUsername("");
-      alert(`Invitation sent to ${inviteUsername}!`);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to send invitation");
-    }
+    } catch (err) { setError("Failed to respond to invite"); }
   };
 
   const fetchGroupBalances = async (groupId) => {
     try {
-      const res = await axios.get(`${API_URL}/api/groups/${groupId}/balances`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(`${API_URL}/api/groups/${groupId}/balances`, { headers: { Authorization: `Bearer ${token}` } });
       setGroupBalances(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleLeaveGroup = async () => {
-    if (!window.confirm("Are you sure you want to leave this group?")) return;
-    try {
-      await axios.delete(
-        `${API_URL}/api/groups/${selectedGroup._id}/leave`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setSelectedGroup(null);
-      refreshDashboard();
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to leave group");
-    }
+    } catch (err) { console.error(err); }
   };
 
   const selectGroup = (group) => {
@@ -106,138 +58,101 @@ export default function Groups({ token, groups, refreshDashboard }) {
   };
 
   return (
-    <div className="groups-container">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-        <h3 style={{ margin: 0 }}>Your Groups</h3>
-        <button className="btn btn-primary" onClick={() => setShowCreate(!showCreate)} style={{ width: "auto", padding: "0.5rem 1rem" }}>
+    <div className="groups-section fade-in">
+      <div className="section-header">
+        <h3 style={{ fontSize: "1.5rem" }}>Your Groups</h3>
+        <button className="btn btn-primary" onClick={() => setShowCreate(!showCreate)}>
           {showCreate ? "Cancel" : "+ New Group"}
         </button>
       </div>
 
-      {error && <p className="text-danger">{error}</p>}
-
       {showCreate && (
-        <form onSubmit={handleCreateGroup} className="glass-panel" style={{ marginBottom: "1.5rem", padding: "1rem" }}>
-          <input
-            type="text"
-            className="input-field"
-            placeholder="Group Name"
-            value={newGroupName}
-            onChange={(e) => setNewGroupName(e.target.value)}
-            style={{ marginBottom: "0.5rem" }}
-          />
-          <button type="submit" className="btn btn-primary">Create</button>
+        <form onSubmit={handleCreateGroup} className="balance-card" style={{ marginBottom: "var(--s-32)", borderStyle: "dashed", background: "transparent" }}>
+          <div className="form-group">
+            <input
+              type="text"
+              className="input-field"
+              placeholder="Enter Group Name..."
+              value={newGroupName}
+              onChange={(e) => setNewGroupName(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ width: "100%", background: "var(--primary)", color: "black", borderColor: "var(--primary)" }}>Create Group</button>
         </form>
       )}
 
       {invites.length > 0 && (
-        <div className="glass-panel" style={{ marginBottom: "1.5rem", padding: "1rem", borderColor: "var(--primary)" }}>
-          <h4 style={{ margin: "0 0 1rem 0" }}>Pending Invites</h4>
+        <div className="balance-card" style={{ marginBottom: "var(--s-32)", borderColor: "var(--primary)" }}>
+          <h4 style={{ marginBottom: "var(--s-16)" }}>Pending Invites</h4>
           {invites.map((invite) => (
-            <div key={invite._id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-              <span>{invite.invitedBy.username} invited you to <strong>{invite.groupId.name}</strong></span>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                <button className="btn btn-success btn-sm" onClick={() => handleRespondInvite(invite._id, "accepted")} style={{ width: "auto" }}>Accept</button>
-                <button className="btn btn-outline btn-sm" onClick={() => handleRespondInvite(invite._id, "rejected")} style={{ width: "auto" }}>Decline</button>
+            <div key={invite._id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid var(--border)" }}>
+              <span className="text-secondary"><strong>{invite.invitedBy.username}</strong> → <strong>{invite.groupId.name}</strong></span>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button className="btn btn-primary" style={{ padding: "4px 12px", background: "var(--primary)", color: "black" }} onClick={() => handleRespondInvite(invite._id, "accepted")}>Accept</button>
+                <button className="btn btn-secondary" style={{ padding: "4px 12px" }} onClick={() => handleRespondInvite(invite._id, "rejected")}>Decline</button>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      <div className="groups-list">
+      <div className="recent-expenses-list">
         {groups.length === 0 ? (
-          <p className="text-muted">No groups yet.</p>
+          <div style={{ padding: "var(--s-48)", textAlign: "center", color: "var(--text-secondary)" }}>
+            No groups yet. Create one to start splitting!
+          </div>
         ) : (
           groups.map((group) => (
-            <BentoPanel
-              key={group._id}
-              className={`group-card ${selectedGroup?._id === group._id ? "active" : ""}`}
-              onClick={() => selectGroup(group)}
-              style={{ padding: "1rem", marginBottom: "0.5rem" }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                <div className="avatar-small" style={{ background: "var(--primary)", fontSize: "0.8rem" }}>
-                  {group.name.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{group.name}</div>
-                  <div className="text-muted" style={{ fontSize: "0.75rem" }}>{group.members.length} members</div>
-                </div>
+            <div key={group._id} className="expense-row" onClick={() => selectGroup(group)} style={{ cursor: "pointer", gridTemplateColumns: "48px 1fr 1fr" }}>
+              <div className="expense-avatar" style={{ background: "var(--primary)", color: "black", fontWeight: "bold" }}>
+                {group.name.charAt(0).toUpperCase()}
               </div>
-            </BentoPanel>
+              <div className="expense-info">
+                <h4>{group.name}</h4>
+                <p>{group.members.length} members</p>
+              </div>
+              <div className="expense-share">
+                 <span className="text-secondary">View Details →</span>
+              </div>
+            </div>
           ))
         )}
       </div>
 
       {selectedGroup && createPortal(
-        <div className="group-detail-overlay fade-in">
-          <div className="glass-panel group-detail-panel">
-            <div className="group-detail-header">
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <div className="avatar" style={{ width: "50px", height: "50px" }}>
-                  {selectedGroup.name.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <h2 style={{ margin: 0, color: "var(--primary)" }}>{selectedGroup.name}</h2>
-                  <p className="text-muted" style={{ margin: 0, fontSize: "0.85rem" }}>
-                    Created by {selectedGroup.createdBy === selectedGroup.members[0]._id ? "You" : "a member"}
-                  </p>
-                </div>
+        <div className="modal-overlay fade-in" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.8)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div className="balance-card" style={{ maxWidth: "600px", width: "90%", maxHeight: "90vh", overflowY: "auto" }}>
+            <div className="section-header" style={{ marginBottom: "var(--s-32)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                <div className="logo-icon" style={{ background: "var(--primary)", color: "black" }}>{selectedGroup.name.charAt(0).toUpperCase()}</div>
+                <h2 style={{ margin: 0 }}>{selectedGroup.name}</h2>
               </div>
-              <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                <button
-                  className="btn btn-outline btn-danger"
-                  onClick={handleLeaveGroup}
-                  style={{ width: "auto", padding: "0.5rem 1rem", fontSize: "0.85rem" }}
-                >
-                  Leave Group
-                </button>
-                <button className="btn-close" onClick={() => setSelectedGroup(null)}>×</button>
-              </div>
+              <button className="btn" style={{ fontSize: "1.5rem", padding: "0 10px", background: "transparent", border: "none" }} onClick={() => setSelectedGroup(null)}>×</button>
             </div>
 
-            <div className="group-detail-content">
-              <div className="detail-section">
-                <h4 className="panel-section-title">📊 Group Balances</h4>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--s-32)" }}>
+              <div>
+                <h4 style={{ marginBottom: "var(--s-16)", color: "var(--text-secondary)" }}>Balances</h4>
                 {groupBalances ? (
-                  <div className="balances-list">
-                    {Object.values(groupBalances).map((mb) => (
-                      <div key={mb.username} className="balance-item-row">
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                          <div className="avatar-mini">{mb.username.charAt(0).toUpperCase()}</div>
-                          <span>{mb.username}</span>
-                        </div>
-                        <span className={mb.netBalance >= 0 ? "text-success" : "text-danger"} style={{ fontWeight: 700 }}>
-                          {mb.netBalance >= 0 ? "+" : "-"}₹{Math.abs(mb.netBalance).toFixed(2)}
-                        </span>
-                      </div>
-                    ))}
-                    {Object.keys(groupBalances).length === 0 && <p className="text-muted">No balances yet.</p>}
-                  </div>
-                ) : (
-                  <div className="loading-spinner">Loading...</div>
-                )}
+                  Object.values(groupBalances).map((mb) => (
+                    <div key={mb.username} style={{ display: "flex", justifyContent: "space-between", padding: "12px 0", borderBottom: "1px solid var(--border)" }}>
+                      <span>{mb.username}</span>
+                      <span className={mb.netBalance >= 0 ? "text-success" : "text-danger"} style={{ fontWeight: 700 }}>
+                        {mb.netBalance >= 0 ? "+" : "-"}₹{Math.abs(mb.netBalance).toFixed(0)}
+                      </span>
+                    </div>
+                  ))
+                ) : <p>Loading...</p>}
               </div>
 
-              <div className="detail-section">
-                <h4 className="panel-section-title">➕ Invite Friends</h4>
-                <form onSubmit={handleInvite} className="invite-form">
-                  <input
-                    type="text"
-                    className="input-field"
-                    placeholder="Enter username"
-                    value={inviteUsername}
-                    onChange={(e) => setInviteUsername(e.target.value)}
-                    required
-                  />
-                  <button type="submit" className="btn btn-primary" style={{ width: "auto" }}>Invite</button>
-                </form>
-
-                <h4 className="panel-section-title" style={{ marginTop: "1.5rem" }}>👥 Members ({selectedGroup.members.length})</h4>
-                <div className="members-badges">
+              <div>
+                <h4 style={{ marginBottom: "var(--s-16)", color: "var(--text-secondary)" }}>Members</h4>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                   {selectedGroup.members.map((m) => (
-                    <span key={m._id} className="badge-outline">{m.username}</span>
+                    <span key={m._id} style={{ background: "#262626", padding: "4px 12px", borderRadius: "20px", fontSize: "0.85rem" }}>
+                      {m.username}
+                    </span>
                   ))}
                 </div>
               </div>
