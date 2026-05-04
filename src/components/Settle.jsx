@@ -37,7 +37,6 @@ export default function Settle({ token, refresh }) {
     }
     setLoading(true);
     try {
-      // Fetch payee info to see if they have UPI
       const res = await axios.get(`${API_URL}/api/users/username/${toUsername.trim()}/payment-info`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -74,7 +73,7 @@ export default function Settle({ token, refresh }) {
       setAmount("");
       setShowQrModal(false);
       refresh();
-      alert("Payment request sent! The recipient must confirm it to update balances.");
+      alert("Payment request sent!");
     } catch (err) {
       setError(err.response?.data?.message || "Settlement failed");
     } finally {
@@ -100,11 +99,11 @@ export default function Settle({ token, refresh }) {
   const qrCodeUrl = payeeUpi ? `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiLink)}` : null;
 
   return (
-    <div className="action-form" style={{ border: "none", padding: 0, background: "transparent" }}>
+    <div className="settle-form">
       <h3>Settle Up</h3>
-      <p className="text-muted" style={{ fontSize: "0.9rem", marginBottom: "1.5rem" }}>Pay back what you owe.</p>
+      <p className="text-meta" style={{ marginBottom: "var(--s-16)" }}>Pay back what you owe.</p>
 
-      <div className="input-group">
+      <div className="form-group">
         <label className="input-label">Recipient Username</label>
         <input
           className="input-field"
@@ -114,7 +113,7 @@ export default function Settle({ token, refresh }) {
         />
       </div>
 
-      <div className="input-group">
+      <div className="form-group">
         <label className="input-label">Amount (₹)</label>
         <input
           className="input-field"
@@ -132,26 +131,26 @@ export default function Settle({ token, refresh }) {
       )}
 
       <button 
-        className="btn" 
+        className="btn btn-primary" 
         onClick={initiatePayment} 
         disabled={loading}
-        style={{ background: "linear-gradient(135deg, var(--primary), var(--secondary))", color: "white", marginBottom: "2rem" }}
+        style={{ width: "100%", marginBottom: "var(--s-24)" }}
       >
         {loading ? "Processing..." : "Pay Now"}
       </button>
 
       {/* Pending Requests Section */}
       {pendingRequests.length > 0 && (
-        <div style={{ marginTop: "1rem" }}>
-          <h4 style={{ marginBottom: "1rem" }}>Pending Confirmations</h4>
+        <div style={{ marginTop: "var(--s-16)" }}>
+          <h4>Pending Confirmations</h4>
           {pendingRequests.map(req => (
-            <div key={req._id} style={{ background: "rgba(255,255,255,0.05)", padding: "1rem", borderRadius: "8px", marginBottom: "0.5rem", border: "1px solid var(--border-color)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                <span><strong>{req.from.username}</strong> paid you ₹{req.amount}</span>
-              </div>
-              <div style={{ display: "flex", gap: "0.5rem" }}>
-                <button className="btn btn-success btn-sm" onClick={() => respondToRequest(req._id, "completed")}>Confirm Received</button>
-                <button className="btn btn-outline btn-sm" onClick={() => respondToRequest(req._id, "declined")}>Decline</button>
+            <div key={req._id} className="card" style={{ padding: "var(--s-16)", marginBottom: "var(--s-8)", background: "rgba(255,255,255,0.02)" }}>
+              <p style={{ fontSize: "0.9rem", marginBottom: "var(--s-8)" }}>
+                <strong>{req.from.username}</strong> paid you <span className="text-success">₹{req.amount}</span>
+              </p>
+              <div style={{ display: "flex", gap: "var(--s-8)" }}>
+                <button className="btn btn-primary" style={{ padding: "6px 12px", fontSize: "0.8rem" }} onClick={() => respondToRequest(req._id, "completed")}>Confirm</button>
+                <button className="btn btn-outline" style={{ padding: "6px 12px", fontSize: "0.8rem" }} onClick={() => respondToRequest(req._id, "declined")}>Decline</button>
               </div>
             </div>
           ))}
@@ -160,27 +159,27 @@ export default function Settle({ token, refresh }) {
 
       {/* QR Code Modal using Portal */}
       {showQrModal && createPortal(
-        <div className="group-detail-overlay fade-in">
-          <div className="glass-panel group-detail-panel" style={{ maxWidth: "400px", textAlign: "center" }}>
+        <div className="modal-overlay fade-in">
+          <div className="card" style={{ maxWidth: "400px", width: "90%", textAlign: "center" }}>
             <h3 style={{ marginTop: 0 }}>Pay {toUsername}</h3>
             
             {payeeUpi ? (
               <>
-                <p className="text-muted">Scan with any UPI app</p>
-                <div style={{ background: "white", padding: "1rem", borderRadius: "1rem", display: "inline-block", marginBottom: "1.5rem" }}>
+                <p className="text-meta">Scan with any UPI app</p>
+                <div style={{ background: "white", padding: "1rem", borderRadius: "1rem", display: "inline-block", margin: "1.5rem 0" }}>
                   <img src={qrCodeUrl} alt="UPI QR Code" style={{ width: "200px", height: "200px" }} />
                 </div>
-                <p style={{ fontWeight: 600, fontSize: "1.2rem" }}>₹{amount}</p>
-                <p className="text-muted" style={{ fontSize: "0.85rem" }}>UPI ID: {payeeUpi}</p>
+                <div className="h2" style={{ margin: "0 0 4px" }}>₹{amount}</div>
+                <p className="text-meta">UPI ID: {payeeUpi}</p>
               </>
             ) : (
               <div style={{ padding: "2rem 0" }}>
                 <p>This user hasn't added a UPI ID.</p>
-                <p className="text-muted" style={{ fontSize: "0.9rem" }}>Pay them directly via cash or other means.</p>
+                <p className="text-meta">Pay them directly via cash or other means.</p>
               </div>
             )}
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "1.5rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--s-8)", marginTop: "var(--s-24)" }}>
               <button className="btn btn-primary" onClick={confirmSent} disabled={loading}>
                 {loading ? "Sending..." : "I have paid them"}
               </button>
