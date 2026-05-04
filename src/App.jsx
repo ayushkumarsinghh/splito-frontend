@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Sun, Moon } from "lucide-react";
 import Landing from "./components/Landing";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -35,9 +36,8 @@ export default function App() {
         onClick={toggleTheme} 
         aria-label="Toggle Theme"
         title={`Switch to ${theme === "dark" ? "Light" : "Night"} Mode`}
-        style={{ fontSize: "0.75rem", fontWeight: "bold" }}
       >
-        {theme === "dark" ? "LIGHT" : "NIGHT"}
+        {theme === "dark" ? <Sun size={24} /> : <Moon size={24} />}
       </button>
     </div>
   );

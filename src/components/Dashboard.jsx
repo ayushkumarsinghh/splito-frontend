@@ -180,17 +180,7 @@ export default function Dashboard({ token, setToken }) {
               </div>
             </div>
 
-            <div className="section-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-              <h3 style={{ fontSize: "1.75rem", fontFamily: 'Outfit' }}>Recent Activity</h3>
-              <button className="btn btn-primary" onClick={() => setActiveView("expenses")}>
-                <Plus size={18} style={{ marginRight: "8px" }} />
-                Add Expense
-              </button>
-            </div>
-
-            <RecentActivity token={token} refreshTrigger={refreshTrigger} />
-
-            <div style={{ marginTop: "48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+            <div style={{ marginBottom: "48px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
                <div className="balance-card" style={{ background: "rgba(255,255,255,0.02)", borderStyle: "dashed" }}>
                   <AddExpense token={token} groups={groups} refresh={() => setRefreshTrigger(p => p + 1)} />
                </div>
@@ -198,6 +188,15 @@ export default function Dashboard({ token, setToken }) {
                   <Settle token={token} refresh={() => setRefreshTrigger(p => p + 1)} />
                </div>
             </div>
+
+            <div className="section-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+              <h3 style={{ fontSize: "1.75rem", fontFamily: 'Outfit' }}>Recent Activity</h3>
+              <button className="btn btn-primary" onClick={() => setActiveView("activity")}>
+                View All
+              </button>
+            </div>
+
+            <RecentActivity token={token} refreshTrigger={refreshTrigger} />
           </>
         )}
       </main>
