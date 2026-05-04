@@ -30,35 +30,36 @@ export default function ExpenseHistory({ token, refreshTrigger }) {
 
   return (
     <div className="expense-history">
-      <div className="history-header">
-        <h3 style={{ margin: 0, fontSize: "1.4rem", color: "var(--primary)" }}>Expense History</h3>
-        <div className="search-box">
-          <input
-            type="text"
-            className="input-field"
-            placeholder="Search expenses..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ padding: "0.5rem 1rem", fontSize: "0.9rem" }}
-          />
-        </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--s-24)" }}>
+        <h2 style={{ margin: 0 }}>History</h2>
+        <input
+          type="text"
+          className="input-field"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{ width: "150px", padding: "8px 12px", fontSize: "0.85rem" }}
+        />
       </div>
 
       {loading ? (
-        <p className="text-muted">Loading history...</p>
+        <p className="text-meta">Loading history...</p>
       ) : expenses.length === 0 ? (
-        <p className="text-muted" style={{ marginTop: "1rem" }}>No expenses found.</p>
+        <div className="empty-state-mini">
+           <p>No expenses found.</p>
+        </div>
       ) : (
         <div className="history-list">
           {expenses.map((expense) => (
             <div key={expense._id} className="history-item">
               <div className="history-info">
-                <span className="history-desc">{expense.description || "No description"}</span>
-                <span className="history-meta">
-                  Paid by <strong>{expense.paidBy?.username}</strong> {expense.groupId && <>in <strong>{expense.groupId.name}</strong></>} on {new Date(expense.createdAt).toLocaleDateString()}
+                <span style={{ fontWeight: 600, fontSize: "1rem", color: "var(--text)" }}>{expense.description || "No description"}</span>
+                <span className="text-meta" style={{ display: "block" }}>
+                  Paid by <strong>{expense.paidBy?.username}</strong> {expense.groupId && <>in <strong>{expense.groupId.name}</strong></>}
                 </span>
+                <span className="text-meta" style={{ fontSize: "0.75rem" }}>{new Date(expense.createdAt).toLocaleDateString()}</span>
               </div>
-              <div className="history-amount">
+              <div className="h3" style={{ margin: 0, color: "var(--primary)" }}>
                 ₹{expense.amount}
               </div>
             </div>
