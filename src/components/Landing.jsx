@@ -4,7 +4,7 @@ import {
   Shield, 
   Activity, 
   ArrowRight, 
-  Github
+  Code
 } from "lucide-react";
 
 export default function Landing({ setPage }) {
@@ -121,7 +121,7 @@ export default function Landing({ setPage }) {
           </div>
           <div className="footer-links">
             <a href="https://github.com/ayushkumarsinghh" target="_blank" rel="noopener noreferrer" className="footer-link">
-              <Github size={20} style={{ marginRight: "8px" }} />
+              <Code size={20} style={{ marginRight: "8px" }} />
               GitHub
             </a>
             <a href="#" className="footer-link">Terms</a>
