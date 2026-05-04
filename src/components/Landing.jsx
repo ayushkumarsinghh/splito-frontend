@@ -1,112 +1,104 @@
-import { useEffect } from "react";
-import SplitText from "./SplitText/SplitText";
+import React from "react";
 
 export default function Landing({ setPage }) {
-  return (
-    <div className="landing-container fade-in">
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-overlay"></div>
-        <div className="hero-content">
-          <nav className="landing-navbar">
-            <div className="landing-logo">Splito</div>
-            <div className="landing-nav-links">
-              <span onClick={() => setPage("login")}>Login</span>
-              <button className="btn-nav" onClick={() => setPage("signup")}>Sign Up</button>
-            </div>
-          </nav>
+  const previewImage = "/dashboard_preview.png";
 
-          <div className="hero-main">
-            <SplitText
-              text="SPLIT EXPENSES WITH EASE"
-              className="hero-title"
-              delay={40}
-              animationSpeed={1.5}
-              showCallback={false}
-              textAlign="center"
-            />
-            <p className="hero-subtitle">
-              The smartest way to track balances and settle up with your friends.
-              No more awkward "you owe me" texts.
-            </p>
-            <button className="btn-hero" onClick={() => setPage("signup")}>
-              START SPLITTING
+  return (
+    <div className="landing-page fade-in">
+      {/* 🏠 Navigation */}
+      <nav className="landing-nav">
+        <div className="logo">Splito</div>
+        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+          <span 
+            className="footer-link" 
+            style={{ cursor: "pointer", fontWeight: 500 }} 
+            onClick={() => setPage("login")}
+          >
+            Login
+          </span>
+          <button className="btn btn-primary" onClick={() => setPage("signup")} style={{ padding: "8px 20px" }}>
+            Get Started
+          </button>
+        </div>
+      </nav>
+
+      {/* 🚀 Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1>Shared expenses, finally simplified.</h1>
+          <p className="hero-subtitle">
+            The most clear-cut way to split bills, track balances, and settle debts with friends.
+          </p>
+          <div className="hero-btns">
+            <button className="btn btn-primary" onClick={() => setPage("signup")}>
+              Start Free
+            </button>
+            <button className="btn btn-secondary" onClick={() => setPage("login")}>
+              View Demo
             </button>
           </div>
         </div>
       </section>
 
-      {/* USP Banner */}
-      <div className="usp-banner">
-        <h2>Includes tracking for all your group trips and dinners</h2>
-        <div className="usp-capsule">Seamless Settlements</div>
-      </div>
+      {/* 🖥️ Product Preview */}
+      <section className="product-preview">
+        <div className="preview-container">
+          <img src={previewImage} alt="Splito Dashboard Preview" />
+        </div>
+      </section>
 
-      {/* Features Grid */}
+      {/* 🛠️ How it Works - Redesigned 3-Card Grid */}
       <section className="features-section">
-        <h2 className="section-title">WHY CHOOSE SPLITO?</h2>
+        <div style={{ marginBottom: "var(--s-64)" }}>
+          <h2 style={{ fontSize: "2.5rem", marginBottom: "var(--s-16)" }}>How Splito works</h2>
+          <p className="text-secondary">Three steps to total financial clarity.</p>
+        </div>
+        
         <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80" alt="Group" />
+          {/* Step 1: Add Expense */}
+          <div className="card feature-card">
+            <div className="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
             </div>
-            <h3>Group Trips</h3>
-            <p>Perfect for tracking shared expenses during vacations and getaways.</p>
+            <h3>Add Expense</h3>
+            <p>Log any cost, from dinner to rent, and assign it to a group or friend instantly.</p>
           </div>
-          <div className="feature-card">
-            <div className="feature-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Dinner" />
+
+          {/* Step 2: Split Automatically */}
+          <div className="card feature-card">
+            <div className="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             </div>
-            <h3>Dinners out</h3>
-            <p>Split the bill exactly as it should be without the headache.</p>
+            <h3>Split Automatically</h3>
+            <p>Our engine handles the math. Choose equal splits or custom amounts in seconds.</p>
           </div>
-          <div className="feature-card">
-            <div className="feature-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=800&q=80" alt="Finance" />
+
+          {/* Step 3: Track Balances */}
+          <div className="card feature-card">
+            <div className="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
             </div>
-            <h3>Clear Balances</h3>
-            <p>Always know exactly who owes who, summarized perfectly.</p>
+            <h3>Track Balances</h3>
+            <p>See real-time summaries of who owes what and settle up with one click.</p>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="testimonials-section">
-        <h2 className="section-title text-dark">WHAT OUR USERS SAY</h2>
-        <div className="testimonials-grid">
-          <div className="testimonial-card">
-            <span className="quote-icon">"</span>
-            <p>"Splito saved our Europe trip. It handled multiple currencies and complex splits effortlessly."</p>
-            <h4>- Sarah J.</h4>
+      {/* 👣 Professional Footer */}
+      <footer className="footer">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <div className="logo" style={{ marginBottom: "var(--s-8)" }}>Splito</div>
+            <p className="footer-tagline">Built for financial clarity and seamless group settlements.</p>
           </div>
-          <div className="testimonial-card">
-            <span className="quote-icon">"</span>
-            <p>"I use it for my roommates. We just log our groceries and settle up at the end of the month."</p>
-            <h4>- Mike T.</h4>
-          </div>
-          <div className="testimonial-card">
-            <span className="quote-icon">"</span>
-            <p>"The best UI I've seen for a finance app. Simple, bold, and gets the job done."</p>
-            <h4>- Alex R.</h4>
+          <div className="footer-links">
+            <a href="https://github.com/ayushkumarsinghh" target="_blank" rel="noopener noreferrer" className="footer-link">GitHub</a>
+            <a href="#" className="footer-link">Terms</a>
+            <a href="#" className="footer-link">Privacy</a>
           </div>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="landing-footer">
-        <div className="footer-content">
-          <div className="footer-col">
-            <h3>Splito</h3>
-            <p>Making money between friends simple.</p>
-          </div>
-          <div className="footer-col">
-            <h4>Social</h4>
-            <p><a href="https://x.com/AyushKumar65771">Twitter</a></p>
-          </div>
-          <div className="footer-col">
-            <h4>Contact</h4>
-            <p>ayush2006singh2622@gmail.com</p>
-          </div>
+        <div className="footer-bottom">
+          <p>© 2026 Splito. Made by Ayush Kumar Singh.</p>
         </div>
       </footer>
     </div>
