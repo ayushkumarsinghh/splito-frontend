@@ -9,8 +9,8 @@ import {
   Settings, 
   LogOut, 
   Plus, 
-  TrendingUp,
-  TrendingDown
+  TrendingUp, 
+  TrendingDown 
 } from "lucide-react";
 import AddExpense from "./AddExpense";
 import Settle from "./Settle";
@@ -26,6 +26,7 @@ export default function Dashboard({ token, setToken }) {
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [username, setUsername] = useState("User");
+  const [expandedCard, setExpandedCard] = useState(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -68,6 +69,41 @@ export default function Dashboard({ token, setToken }) {
     </div>
   );
 
+  const BalanceDetailList = ({ type }) => {
+    const isOwe = type === 'owe';
+    const list = Object.entries(balances)
+      .filter(([_, val]) => isOwe ? val.youOwe > 0 : val.owesYou > 0)
+      .map(([user, val]) => ({
+        user,
+        amount: isOwe ? val.youOwe : val.owesYou
+      }));
+
+    return (
+      <div className="fade-in" style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px solid var(--border)" }}>
+        <h4 style={{ fontSize: "0.9rem", color: "var(--text-secondary)", marginBottom: "16px", textTransform: "uppercase" }}>
+          Breakdown
+        </h4>
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          {list.length === 0 ? (
+             <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>No debts found.</p>
+          ) : list.map((item, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "var(--surface-hover)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.7rem" }}>
+                  {item.user.charAt(0).toUpperCase()}
+                </div>
+                <span style={{ fontSize: "1rem", fontWeight: 500 }}>{item.user}</span>
+              </div>
+              <span style={{ fontWeight: 700, color: isOwe ? "var(--danger)" : "var(--success)" }}>
+                ₹{item.amount.toLocaleString()}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="dashboard-layout fade-in">
       <aside className="sidebar">
@@ -104,7 +140,7 @@ export default function Dashboard({ token, setToken }) {
            </div>
         </header>
 
-        {activeView === "profile" ? (
+        {activeView === "profile" || activeView === "settings" ? (
           <Profile token={token} onBack={() => setActiveView("dashboard")} />
         ) : activeView === "groups" ? (
           <Groups token={token} groups={groups} refreshDashboard={() => setRefreshTrigger(p => p + 1)} />
@@ -113,22 +149,36 @@ export default function Dashboard({ token, setToken }) {
         ) : (
           <>
             <div className="balance-grid">
-              <div className="balance-card owe-card">
+              <div 
+                className={`balance-card owe-card ${expandedCard === 'owe' ? 'expanded' : ''}`}
+                onClick={() => setExpandedCard(expandedCard === 'owe' ? null : 'owe')}
+                style={{ cursor: "pointer" }}
+              >
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span className="balance-label">You Owe</span>
                   <TrendingDown color="var(--danger)" />
                 </div>
                 <div className="balance-value">₹{totalYouOwe.toLocaleString()}</div>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>Total outstanding debts</p>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                  {expandedCard === 'owe' ? "Click to collapse" : "Total outstanding debts • Click to expand"}
+                </p>
+                {expandedCard === 'owe' && <BalanceDetailList type="owe" />}
               </div>
               
-              <div className="balance-card owed-card">
+              <div 
+                className={`balance-card owed-card ${expandedCard === 'owed' ? 'expanded' : ''}`}
+                onClick={() => setExpandedCard(expandedCard === 'owed' ? null : 'owed')}
+                style={{ cursor: "pointer" }}
+              >
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span className="balance-label">You Are Owed</span>
                   <TrendingUp color="var(--success)" />
                 </div>
                 <div className="balance-value">₹{totalOwedToYou.toLocaleString()}</div>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>Pending from your groups</p>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                  {expandedCard === 'owed' ? "Click to collapse" : "Pending from your groups • Click to expand"}
+                </p>
+                {expandedCard === 'owed' && <BalanceDetailList type="owed" />}
               </div>
             </div>
 

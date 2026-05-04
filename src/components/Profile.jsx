@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { User, Mail, CreditCard, Lock, Save, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
 
 export default function Profile({ token, onBack }) {
   const [profile, setProfile] = useState({ username: "", email: "", upiId: "" });
@@ -26,7 +27,7 @@ export default function Profile({ token, onBack }) {
         upiId: res.data.upiId || ""
       });
     } catch (err) {
-      setError("Failed to load profile");
+      setError("Failed to load profile settings.");
     } finally {
       setLoading(false);
     }
@@ -53,94 +54,110 @@ export default function Profile({ token, onBack }) {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      setMessage("Profile updated successfully!");
+      setMessage("Account settings updated successfully!");
       setPassword(""); 
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to update profile");
+      setError(err.response?.data?.message || "Failed to update profile.");
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) {
-    return <div className="text-muted">Loading profile...</div>;
-  }
+  if (loading) return <div style={{ textAlign: "center", padding: "100px", color: "var(--text-secondary)" }}>Loading your settings...</div>;
 
   return (
-    <div className="card fade-in">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--s-32)" }}>
-        <h2 style={{ margin: 0 }}>Profile Settings</h2>
-        <button className="btn btn-secondary" style={{ padding: "8px 16px", fontSize: "0.85rem" }} onClick={onBack}>
-          Back
+    <div className="profile-settings fade-in" style={{ maxWidth: "800px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "40px" }}>
+        <div>
+          <h2 style={{ fontSize: "2.5rem", fontFamily: 'Outfit', marginBottom: "8px" }}>Account Settings</h2>
+          <p style={{ color: "var(--text-secondary)" }}>Manage your personal information and security.</p>
+        </div>
+        <button className="nav-link" onClick={onBack} style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
+          <ArrowLeft size={18} />
+          <span>Back</span>
         </button>
       </div>
 
       {message && (
-        <div className="text-success" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "1rem", borderRadius: "8px", marginBottom: "1.5rem", border: "1px solid rgba(16, 185, 129, 0.2)", fontSize: "0.9rem" }}>
-          {message}
+        <div className="fade-in" style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(16, 185, 129, 0.1)", color: "var(--success)", padding: "16px 24px", borderRadius: "16px", marginBottom: "32px", border: "1px solid rgba(16, 185, 129, 0.2)" }}>
+          <CheckCircle size={20} />
+          <span style={{ fontWeight: 500 }}>{message}</span>
         </div>
       )}
       
       {error && (
-        <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "1rem", borderRadius: "8px", marginBottom: "1.5rem", border: "1px solid rgba(239, 68, 68, 0.2)", fontSize: "0.9rem" }}>
-          {error}
+        <div className="fade-in" style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(239, 68, 68, 0.1)", color: "var(--danger)", padding: "16px 24px", borderRadius: "16px", marginBottom: "32px", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+          <AlertCircle size={20} />
+          <span style={{ fontWeight: 500 }}>{error}</span>
         </div>
       )}
 
-      <form onSubmit={handleUpdate} style={{ display: "flex", flexDirection: "column", gap: "var(--s-24)", maxWidth: "500px" }}>
-        
-        <div className="form-group">
-          <label className="input-label">Username</label>
-          <input
-            type="text"
-            className="input-field"
-            value={profile.username}
-            onChange={(e) => setProfile({ ...profile, username: e.target.value })}
-            required
-          />
-        </div>
+      <div className="card" style={{ padding: "40px" }}>
+        <form onSubmit={handleUpdate} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+          
+          <div className="form-group">
+            <label className="input-label" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <User size={14} /> Username
+            </label>
+            <input
+              type="text"
+              className="input-field"
+              value={profile.username}
+              onChange={(e) => setProfile({ ...profile, username: e.target.value })}
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="input-label">Email</label>
-          <input
-            type="email"
-            className="input-field"
-            value={profile.email}
-            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label className="input-label" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Mail size={14} /> Email Address
+            </label>
+            <input
+              type="email"
+              className="input-field"
+              value={profile.email}
+              onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <label className="input-label">UPI ID (Optional)</label>
-          <input
-            type="text"
-            className="input-field"
-            placeholder="username@upi"
-            value={profile.upiId}
-            onChange={(e) => setProfile({ ...profile, upiId: e.target.value })}
-          />
-          <span className="text-muted" style={{ fontSize: "0.75rem", marginTop: "4px", display: "block" }}>
-            Friends will use this to settle up with you.
-          </span>
-        </div>
+          <div className="form-group">
+            <label className="input-label" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <CreditCard size={14} /> UPI ID (for settlements)
+            </label>
+            <input
+              type="text"
+              className="input-field"
+              placeholder="username@upi"
+              value={profile.upiId}
+              onChange={(e) => setProfile({ ...profile, upiId: e.target.value })}
+            />
+            <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginTop: "8px" }}>This will be shared with group members to pay you.</p>
+          </div>
 
-        <div className="form-group">
-          <label className="input-label">New Password (Optional)</label>
-          <input
-            type="password"
-            className="input-field"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+          <div className="form-group">
+            <label className="input-label" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Lock size={14} /> Update Password
+            </label>
+            <input
+              type="password"
+              className="input-field"
+              placeholder="Enter new password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginTop: "8px" }}>Leave blank to keep current password.</p>
+          </div>
 
-        <button type="submit" className="btn btn-primary" disabled={saving} style={{ alignSelf: "flex-start", minWidth: "140px" }}>
-          {saving ? "Saving..." : "Save Changes"}
-        </button>
+          <div style={{ gridColumn: "1 / -1", marginTop: "16px" }}>
+            <button type="submit" className="btn btn-primary" disabled={saving} style={{ padding: "14px 32px" }}>
+              <Save size={18} style={{ marginRight: "10px" }} />
+              {saving ? "Saving Changes..." : "Update Settings"}
+            </button>
+          </div>
 
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

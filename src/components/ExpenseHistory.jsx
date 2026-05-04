@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Receipt, Search, Filter, Calendar } from "lucide-react";
 
 export default function ExpenseHistory({ token, refreshTrigger }) {
   const [expenses, setExpenses] = useState([]);
@@ -29,38 +30,52 @@ export default function ExpenseHistory({ token, refreshTrigger }) {
   }, [search, token, refreshTrigger]);
 
   return (
-    <div className="expense-history">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--s-24)" }}>
-        <h2 style={{ margin: 0 }}>History</h2>
-        <input
-          type="text"
-          className="input-field"
-          placeholder="Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{ width: "150px", padding: "8px 12px", fontSize: "0.85rem" }}
-        />
+    <div className="expense-history fade-in">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
+        <h2 style={{ fontSize: "2rem", fontFamily: 'Outfit' }}>History</h2>
+        <div style={{ position: "relative" }}>
+          <Search size={18} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
+          <input
+            type="text"
+            className="input-field"
+            placeholder="Search expenses..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ width: "250px", paddingLeft: "40px" }}
+          />
+        </div>
       </div>
 
       {loading ? (
-        <p className="text-meta">Loading history...</p>
+        <div style={{ textAlign: "center", padding: "40px", color: "var(--text-secondary)" }}>Loading history...</div>
       ) : expenses.length === 0 ? (
-        <div className="empty-state-mini">
-           <p>No expenses found.</p>
+        <div className="card" style={{ textAlign: "center", padding: "60px", background: "transparent", borderStyle: "dashed" }}>
+           <p style={{ color: "var(--text-secondary)" }}>No expenses found matching your search.</p>
         </div>
       ) : (
         <div className="history-list">
           {expenses.map((expense) => (
             <div key={expense._id} className="history-item">
-              <div className="history-info">
-                <span style={{ fontWeight: 600, fontSize: "1rem", color: "var(--text)" }}>{expense.description || "No description"}</span>
-                <span className="text-meta" style={{ display: "block" }}>
-                  Paid by <strong>{expense.paidBy?.username}</strong> {expense.groupId && <>in <strong>{expense.groupId.name}</strong></>}
-                </span>
-                <span className="text-meta" style={{ fontSize: "0.75rem" }}>{new Date(expense.createdAt).toLocaleDateString()}</span>
+              <div className="expense-icon">
+                <Receipt size={22} />
               </div>
-              <div className="h3" style={{ margin: 0, color: "var(--primary)" }}>
-                ₹{expense.amount}
+              
+              <div className="expense-info">
+                <h4>{expense.description || "No description"}</h4>
+                <p>
+                  Paid by <strong>{expense.paidBy?.username}</strong> 
+                  {expense.groupId && <> in <span style={{ color: "var(--primary)" }}>{expense.groupId.name}</span></>}
+                </p>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "16px", color: "var(--text-secondary)", fontSize: "0.85rem" }}>
+                <Calendar size={14} />
+                {new Date(expense.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </div>
+
+              <div className="expense-amount">
+                <div className="amount-value" style={{ color: "var(--primary)" }}>₹{expense.amount.toLocaleString()}</div>
+                <div className="amount-subtext">Total Amount</div>
               </div>
             </div>
           ))}
