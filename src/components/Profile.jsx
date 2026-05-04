@@ -54,7 +54,7 @@ export default function Profile({ token, onBack }) {
       });
       
       setMessage("Profile updated successfully!");
-      setPassword(""); // Clear password field after update
+      setPassword(""); 
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update profile");
     } finally {
@@ -63,33 +63,33 @@ export default function Profile({ token, onBack }) {
   };
 
   if (loading) {
-    return <div className="glass-panel" style={{ textAlign: "center", padding: "2rem" }}>Loading profile...</div>;
+    return <div className="text-muted">Loading profile...</div>;
   }
 
   return (
-    <div className="glass-panel slide-up">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
-        <h2 style={{ margin: 0, color: "var(--text-primary)" }}>👤 Your Profile</h2>
-        <button className="btn btn-outline btn-sm" onClick={onBack} style={{ width: "auto" }}>
-          Back to Dashboard
+    <div className="card fade-in">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--s-32)" }}>
+        <h2 style={{ margin: 0 }}>Profile Settings</h2>
+        <button className="btn btn-secondary" style={{ padding: "8px 16px", fontSize: "0.85rem" }} onClick={onBack}>
+          Back
         </button>
       </div>
 
       {message && (
-        <div className="text-success" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "1rem", borderRadius: "8px", marginBottom: "1.5rem", border: "1px solid rgba(16, 185, 129, 0.2)" }}>
+        <div className="text-success" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "1rem", borderRadius: "8px", marginBottom: "1.5rem", border: "1px solid rgba(16, 185, 129, 0.2)", fontSize: "0.9rem" }}>
           {message}
         </div>
       )}
       
       {error && (
-        <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "1rem", borderRadius: "8px", marginBottom: "1.5rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+        <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "1rem", borderRadius: "8px", marginBottom: "1.5rem", border: "1px solid rgba(239, 68, 68, 0.2)", fontSize: "0.9rem" }}>
           {error}
         </div>
       )}
 
-      <form onSubmit={handleUpdate} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      <form onSubmit={handleUpdate} style={{ display: "flex", flexDirection: "column", gap: "var(--s-24)", maxWidth: "500px" }}>
         
-        <div className="input-group">
+        <div className="form-group">
           <label className="input-label">Username</label>
           <input
             type="text"
@@ -100,7 +100,7 @@ export default function Profile({ token, onBack }) {
           />
         </div>
 
-        <div className="input-group">
+        <div className="form-group">
           <label className="input-label">Email</label>
           <input
             type="email"
@@ -111,32 +111,32 @@ export default function Profile({ token, onBack }) {
           />
         </div>
 
-        <div className="input-group">
+        <div className="form-group">
           <label className="input-label">UPI ID (Optional)</label>
           <input
             type="text"
             className="input-field"
-            placeholder="e.g. username@upi"
+            placeholder="username@upi"
             value={profile.upiId}
             onChange={(e) => setProfile({ ...profile, upiId: e.target.value })}
           />
-          <span className="text-muted" style={{ fontSize: "0.8rem", marginTop: "0.25rem", display: "block" }}>
-            Helps friends pay you back easily.
+          <span className="text-muted" style={{ fontSize: "0.75rem", marginTop: "4px", display: "block" }}>
+            Friends will use this to settle up with you.
           </span>
         </div>
 
-        <div className="input-group">
+        <div className="form-group">
           <label className="input-label">New Password (Optional)</label>
           <input
             type="password"
             className="input-field"
-            placeholder="Leave blank to keep current password"
+            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={saving} style={{ marginTop: "1rem" }}>
+        <button type="submit" className="btn btn-primary" disabled={saving} style={{ alignSelf: "flex-start", minWidth: "140px" }}>
           {saving ? "Saving..." : "Save Changes"}
         </button>
 
