@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Landing from "./components/Landing";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard";
-import LineWaves from "./components/LineWaves/LineWaves";
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [page, setPage] = useState("landing");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === "dark" ? "light" : "dark"));
+  };
 
   const renderContent = () => {
     if (token) return <Dashboard token={token} setToken={setToken} />;
@@ -17,25 +26,19 @@ export default function App() {
   };
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh", color: "white" }}>
-      <LineWaves
-        speed={0.3}
-        innerLineCount={32}
-        outerLineCount={36}
-        warpIntensity={1}
-        rotation={-45}
-        edgeFadeWidth={0}
-        colorCycleSpeed={1}
-        brightness={0.2}
-        color1="#6366f1"
-        color2="#a855f7"
-        color3="#ec4899"
-        enableMouseInteraction
-        mouseInfluence={2}
-      />
-      <div style={{ position: "relative", zIndex: 1 }}>
-        {renderContent()}
-      </div>
+    <div className="app-root">
+      {renderContent()}
+      
+      {/* 🌓 Global Theme Toggle */}
+      <button 
+        className="theme-toggle" 
+        onClick={toggleTheme} 
+        aria-label="Toggle Theme"
+        title={`Switch to ${theme === "dark" ? "Light" : "Night"} Mode`}
+        style={{ fontSize: "0.75rem", fontWeight: "bold" }}
+      >
+        {theme === "dark" ? "LIGHT" : "NIGHT"}
+      </button>
     </div>
   );
 }
