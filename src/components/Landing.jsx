@@ -41,13 +41,35 @@ export default function Landing({ setPage }) {
           <p className="hero-subtitle">
             The most clear-cut way to split bills, track balances, and settle debts with friends—all in one premium dashboard.
           </p>
-          <div className="hero-btns">
+          <div className="hero-btns" style={{ marginBottom: "64px" }}>
             <button className="btn btn-primary" onClick={() => setPage("signup")} style={{ padding: "16px 32px", fontSize: "1.1rem" }}>
               Start for Free
             </button>
             <button className="btn btn-outline" onClick={() => setPage("login")} style={{ padding: "16px 32px", fontSize: "1.1rem" }}>
               View Live Demo
             </button>
+          </div>
+
+          {/* 🖥️ Product Preview */}
+          <div className="preview-container fade-in" style={{ 
+            marginTop: "40px", 
+            borderRadius: "24px", 
+            padding: "12px", 
+            background: "rgba(255,255,255,0.05)", 
+            border: "1px solid var(--border)",
+            boxShadow: "0 40px 100px rgba(0,0,0,0.6)",
+            maxWidth: "1100px",
+            margin: "0 auto"
+          }}>
+            <img 
+              src={previewImage} 
+              alt="Dashboard Preview" 
+              style={{ 
+                width: "100%", 
+                borderRadius: "16px", 
+                display: "block"
+              }} 
+            />
           </div>
         </div>
       </section>
