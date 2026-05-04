@@ -1,10 +1,9 @@
 import React from "react";
 import { 
   Zap, 
-  ShieldCheck, 
-  BarChart3, 
+  Shield, 
+  Activity, 
   ArrowRight, 
-  ChevronRight,
   Github
 } from "lucide-react";
 
@@ -29,7 +28,7 @@ export default function Landing({ setPage }) {
           </span>
           <button className="btn btn-primary" onClick={() => setPage("signup")}>
             Get Started
-            <ChevronRight size={18} style={{ marginLeft: "4px" }} />
+            <ArrowRight size={18} style={{ marginLeft: "4px" }} />
           </button>
         </div>
       </nav>
@@ -92,7 +91,7 @@ export default function Landing({ setPage }) {
 
           <div className="card feature-card">
             <div className="feature-icon">
-              <ShieldCheck size={28} />
+              <Shield size={28} />
             </div>
             <h3>Settle Securely</h3>
             <p>Our settlement engine handles the math perfectly. Choose equal splits or custom amounts with one click.</p>
@@ -100,7 +99,7 @@ export default function Landing({ setPage }) {
 
           <div className="card feature-card">
             <div className="feature-icon">
-              <BarChart3 size={28} />
+              <Activity size={28} />
             </div>
             <h3>Deep Insights</h3>
             <p>Track real-time balances and historical trends to see exactly where your money goes across all your groups.</p>
