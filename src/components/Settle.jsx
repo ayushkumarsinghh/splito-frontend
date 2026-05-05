@@ -160,31 +160,55 @@ export default function Settle({ token, refresh }) {
       {/* QR Code Modal using Portal */}
       {showQrModal && createPortal(
         <div className="modal-overlay fade-in">
-          <div className="card" style={{ maxWidth: "400px", width: "90%", textAlign: "center" }}>
-            <h3 style={{ marginTop: 0 }}>Pay {toUsername}</h3>
+          <div className="card" style={{ maxWidth: "420px", width: "95%", textAlign: "center", position: "relative", padding: "40px" }}>
+            <button 
+              onClick={() => setShowQrModal(false)}
+              style={{ position: "absolute", top: "20px", right: "20px", background: "none", border: "none", color: "var(--text-secondary)", cursor: "pointer", fontSize: "1.5rem" }}
+            >
+              &times;
+            </button>
+
+            <h2 style={{ fontFamily: 'Outfit', marginBottom: "8px" }}>Settle with {toUsername}</h2>
             
             {payeeUpi ? (
               <>
-                <p className="text-meta">Scan with any UPI app</p>
-                <div style={{ background: "white", padding: "1rem", borderRadius: "1rem", display: "inline-block", margin: "1.5rem 0" }}>
-                  <img src={qrCodeUrl} alt="UPI QR Code" style={{ width: "200px", height: "200px" }} />
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>Scan to pay using any UPI app</p>
+                
+                <div style={{ 
+                  background: "white", 
+                  padding: "20px", 
+                  borderRadius: "24px", 
+                  display: "inline-block", 
+                  margin: "32px 0",
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+                  border: "8px solid #f1f5f9"
+                }}>
+                  <img src={qrCodeUrl} alt="UPI QR Code" style={{ width: "220px", height: "220px", display: "block" }} />
                 </div>
-                <div className="h2" style={{ margin: "0 0 4px" }}>₹{amount}</div>
-                <p className="text-meta">UPI ID: {payeeUpi}</p>
+
+                <div style={{ marginBottom: "24px" }}>
+                  <div style={{ fontSize: "2.5rem", fontWeight: 800, fontFamily: 'Outfit', color: "var(--primary)" }}>₹{Number(amount).toLocaleString()}</div>
+                  <div style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginTop: "4px" }}>UPI ID: <span style={{ color: "var(--text)", fontWeight: 600 }}>{payeeUpi}</span></div>
+                </div>
               </>
             ) : (
-              <div style={{ padding: "2rem 0" }}>
-                <p>This user hasn't added a UPI ID.</p>
-                <p className="text-meta">Pay them directly via cash or other means.</p>
+              <div style={{ padding: "40px 0" }}>
+                <div style={{ width: "64px", height: "64px", background: "rgba(239, 68, 68, 0.1)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", color: "var(--danger)" }}>
+                  !
+                </div>
+                <h3 style={{ marginBottom: "8px" }}>No UPI ID Found</h3>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
+                  This user hasn't added a UPI ID to their profile yet. You'll need to settle with them directly.
+                </p>
               </div>
             )}
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--s-8)", marginTop: "var(--s-24)" }}>
-              <button className="btn btn-primary" onClick={confirmSent} disabled={loading}>
-                {loading ? "Sending..." : "I have paid them"}
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "12px" }}>
+              <button className="btn btn-primary" onClick={confirmSent} disabled={loading} style={{ padding: "14px" }}>
+                {loading ? "Processing..." : "I've Sent the Payment"}
               </button>
-              <button className="btn btn-outline" onClick={() => setShowQrModal(false)}>
-                Cancel
+              <button className="btn btn-outline" onClick={() => setShowQrModal(false)} style={{ padding: "14px" }}>
+                Go Back
               </button>
             </div>
           </div>

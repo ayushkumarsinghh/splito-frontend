@@ -121,7 +121,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
       </div>
 
       {selectedGroup && createPortal(
-        <div className="modal-overlay fade-in" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(0,0,0,0.8)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div className="modal-overlay fade-in">
           <div className="balance-card" style={{ maxWidth: "600px", width: "90%", maxHeight: "90vh", overflowY: "auto" }}>
             <div className="section-header" style={{ marginBottom: "var(--s-32)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
