@@ -3,9 +3,10 @@ import {
   Zap, 
   Shield, 
   Activity, 
-  ArrowRight, 
   ChevronRight,
-  Globe
+  Globe,
+  TrendingUp,
+  TrendingDown
 } from "lucide-react";
 
 export default function Landing({ setPage }) {
@@ -57,7 +58,7 @@ export default function Landing({ setPage }) {
             <Globe size={14} />
             <span>Now in Early Access</span>
           </div>
-          <h1>Shared expenses,<br />finally simplified.</h1>
+          <h1 style={{ maxWidth: "900px", margin: "0 auto 24px" }}>Manage expenses,<br />with total clarity.</h1>
           <p className="hero-subtitle">
             The most clear-cut way to split bills, track balances, and settle debts with friends—all in one premium dashboard.
           </p>
@@ -96,7 +97,35 @@ export default function Landing({ setPage }) {
         </div>
       </section>
 
-      {/* 🛠️ Features Section */}
+      {/* 📊 Feature Showcase (Cards from Dashboard) */}
+      <section style={{ padding: "80px 8%", maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: "64px" }}>
+           <h2 style={{ fontSize: "2.5rem", fontFamily: 'Outfit', fontWeight: 800, marginBottom: "16px" }}>Financial overview at a glance</h2>
+           <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>Keep track of every rupee without the headache.</p>
+        </div>
+        
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+          <div className="balance-card owe-card" style={{ padding: "32px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+              <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.05em" }}>You Owe</span>
+              <TrendingDown size={20} color="var(--danger)" />
+            </div>
+            <div style={{ fontSize: "2.5rem", fontWeight: 800, fontFamily: 'Outfit' }}>₹1,240</div>
+            <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginTop: "8px" }}>Total debts across 3 groups</p>
+          </div>
+
+          <div className="balance-card owed-card" style={{ padding: "32px" }}>
+             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+              <span style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.05em" }}>You are owed</span>
+              <TrendingUp size={20} color="var(--success)" />
+            </div>
+            <div style={{ fontSize: "2.5rem", fontWeight: 800, fontFamily: 'Outfit' }}>₹3,500</div>
+            <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginTop: "8px" }}>Total pending settlements</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 🛠️ Features Grid */}
       <section className="features-section" style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ marginBottom: "64px" }}>
           <h2 style={{ fontSize: "2.5rem", fontFamily: 'Outfit', fontWeight: 800, marginBottom: "16px" }}>Everything you need</h2>
