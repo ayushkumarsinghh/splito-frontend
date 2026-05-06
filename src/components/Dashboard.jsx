@@ -85,11 +85,13 @@ export default function Dashboard({ token, setToken }) {
         </h4>
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {list.length === 0 ? (
-             <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>No debts found.</p>
+             <div style={{ padding: "20px", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: "12px", border: "1px dashed var(--border)" }}>
+               <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>All settled up! No debts found.</p>
+             </div>
           ) : list.map((item, i) => (
             <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "var(--surface-hover)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700 }}>
+                <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "var(--primary-gradient)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.8rem", fontWeight: 700, boxShadow: "0 4px 12px var(--primary-glow)" }}>
                   {item.user.charAt(0).toUpperCase()}
                 </div>
                 <span style={{ fontSize: "0.95rem", fontWeight: 500 }}>{item.user}</span>
@@ -141,12 +143,12 @@ export default function Dashboard({ token, setToken }) {
       <main className="main-content">
         <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "48px" }}>
            <div>
-             <h2 style={{ fontSize: "2.25rem", fontFamily: 'Outfit', fontWeight: 700 }}>Welcome, {username}</h2>
-             <p style={{ color: "var(--text-secondary)" }}>Your financial overview for today.</p>
+              <h2 style={{ fontSize: "2.5rem", fontFamily: 'Outfit', fontWeight: 800, letterSpacing: "-0.03em", marginBottom: "4px" }}>Welcome, {username}</h2>
+              <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", opacity: 0.8, fontWeight: 500 }}>Your financial overview for today.</p>
            </div>
-           <div style={{ width: "56px", height: "56px", borderRadius: "16px", background: "var(--primary-glow)", border: "1px solid var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", color: "var(--primary)", fontSize: "1.2rem" }}>
-             {username.charAt(0).toUpperCase()}
-           </div>
+            <div style={{ width: "56px", height: "56px", borderRadius: "16px", background: "var(--primary-gradient)", boxShadow: "0 10px 25px var(--primary-glow)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", color: "white", fontSize: "1.2rem", border: "2px solid rgba(255,255,255,0.1)" }}>
+              {username.charAt(0).toUpperCase()}
+            </div>
         </header>
 
         {activeView === "settings" ? (

@@ -52,7 +52,7 @@ export default function AddExpense({ token, groups, refresh }) {
   return (
     <div className="add-expense-form">
       <h3>Add Expense</h3>
-      <p className="text-meta" style={{ marginBottom: "var(--s-16)" }}>Log a new shared cost.</p>
+      <p className="text-meta" style={{ marginBottom: "var(--s-24)", fontSize: "0.95rem", color: "var(--text-secondary)", opacity: 0.8 }}>Log a new shared cost for your group.</p>
 
       <form onSubmit={addExpense} style={{ display: "flex", flexDirection: "column", gap: "var(--s-16)" }}>
         <div className="form-group">
@@ -85,7 +85,13 @@ export default function AddExpense({ token, groups, refresh }) {
             className="input-field"
             value={groupId}
             onChange={(e) => setGroupId(e.target.value)}
-            style={{ appearance: "none" }}
+            style={{ 
+              appearance: "none", 
+              backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E\")",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "right 12px center",
+              backgroundSize: "16px"
+            }}
           >
             <option value="">Personal / No Group</option>
             {groups.map((g) => (

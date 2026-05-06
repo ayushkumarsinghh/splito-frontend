@@ -31,6 +31,34 @@
   --primary-glow: rgba(99, 102, 241, 0.1);
 }
 
+/* 🎨 Global Vibes */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -356,7 +384,10 @@ body {
 }
 
 .fade-in { animation: fadeIn 0.4s ease-out; }
+.spin { animation: spin 1s linear infinite; }
+
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 
 /* 🎭 Modals & Overlays */

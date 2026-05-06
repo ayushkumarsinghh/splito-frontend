@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import axios from "axios";
+import { ChevronRight, Loader2, Users, Target, Shield } from "lucide-react";
 
 export default function Groups({ token, userId, groups, refreshDashboard }) {
   const [showCreate, setShowCreate] = useState(false);
@@ -131,21 +132,22 @@ export default function Groups({ token, userId, groups, refreshDashboard }) {
 
       <div className="recent-expenses-list">
         {groups.length === 0 ? (
-          <div style={{ padding: "var(--s-48)", textAlign: "center", color: "var(--text-secondary)" }}>
-            No groups yet. Create one to start splitting!
+          <div style={{ padding: "var(--s-64)", textAlign: "center", background: "rgba(255,255,255,0.02)", borderRadius: "20px", border: "1px dashed var(--border)" }}>
+            <Users size={40} color="var(--text-secondary)" style={{ marginBottom: "16px", opacity: 0.5 }} />
+            <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>No groups yet. Create one to start splitting!</p>
           </div>
         ) : (
           groups.map((group) => (
-            <div key={group._id} className="expense-row" onClick={() => selectGroup(group)} style={{ cursor: "pointer", gridTemplateColumns: "48px 1fr 1fr" }}>
-              <div className="expense-avatar" style={{ background: "var(--primary)", color: "white", fontWeight: "bold" }}>
+            <div key={group._id} className="expense-row" onClick={() => selectGroup(group)} style={{ cursor: "pointer", gridTemplateColumns: "56px 1fr 48px", padding: "24px", alignItems: "center" }}>
+              <div className="expense-avatar" style={{ width: "48px", height: "48px", background: "var(--primary-gradient)", color: "white", fontWeight: "bold", boxShadow: "0 8px 16px var(--primary-glow)", border: "2px solid rgba(255,255,255,0.1)" }}>
                 {group.name.charAt(0).toUpperCase()}
               </div>
               <div className="expense-info">
                 <h4>{group.name}</h4>
                 <p>{group.members.length} members</p>
               </div>
-              <div className="expense-share">
-                 <span className="text-secondary">View Details →</span>
+              <div className="expense-share" style={{ textAlign: "right" }}>
+                 <ChevronRight size={20} color="var(--text-secondary)" />
               </div>
             </div>
           ))
@@ -187,7 +189,11 @@ export default function Groups({ token, userId, groups, refreshDashboard }) {
                       </span>
                     </div>
                   ))
-                ) : <p>Loading...</p>}
+                ) : (
+                  <div style={{ display: "flex", justifyContent: "center", padding: "40px" }}>
+                    <Loader2 size={24} className="spin" color="var(--primary)" />
+                  </div>
+                )}
               </div>
 
               <div>

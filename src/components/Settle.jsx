@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { createPortal } from "react-dom";
+import { AlertCircle, CheckCircle2, QrCode, Wallet } from "lucide-react";
 
 export default function Settle({ token, refresh }) {
   const [toUsername, setToUsername] = useState("");
@@ -104,7 +105,7 @@ export default function Settle({ token, refresh }) {
   return (
     <div className="settle-form">
       <h3>Settle Up</h3>
-      <p className="text-meta" style={{ marginBottom: "var(--s-16)" }}>Pay back what you owe.</p>
+      <p className="text-meta" style={{ marginBottom: "var(--s-24)", fontSize: "0.95rem", color: "var(--text-secondary)", opacity: 0.8 }}>Pay back what you owe with ease.</p>
 
       <div className="form-group">
         <label className="input-label">Recipient Username</label>
@@ -203,7 +204,7 @@ export default function Settle({ token, refresh }) {
             ) : (
               <div style={{ padding: "40px 0" }}>
                 <div style={{ width: "64px", height: "64px", background: "rgba(239, 68, 68, 0.1)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", color: "var(--danger)" }}>
-                  !
+                  <AlertCircle size={32} />
                 </div>
                 <h3 style={{ marginBottom: "8px" }}>No UPI ID Found</h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
