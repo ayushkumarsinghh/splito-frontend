@@ -57,6 +57,22 @@ export default function Groups({ token, groups, refreshDashboard }) {
     fetchGroupBalances(group._id);
   };
 
+  const handleInvite = async (e) => {
+    e.preventDefault();
+    if (!inviteUsername) return;
+    try {
+      await axios.post(`${API_URL}/api/groups/${selectedGroup._id}/invite`, 
+        { username: inviteUsername }, 
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setInviteUsername("");
+      alert("Invite sent successfully!");
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to send invite");
+      setTimeout(() => setError(""), 3000);
+    }
+  };
+
   return (
     <div className="groups-section fade-in">
       <div className="section-header">
@@ -78,7 +94,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary" style={{ width: "100%", background: "var(--primary)", color: "black", borderColor: "var(--primary)" }}>Create Group</button>
+          <button type="submit" className="btn btn-primary" style={{ width: "100%", background: "var(--primary)", color: "white", borderColor: "var(--primary)" }}>Create Group</button>
         </form>
       )}
 
@@ -89,7 +105,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
             <div key={invite._id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid var(--border)" }}>
               <span className="text-secondary"><strong>{invite.invitedBy.username}</strong> → <strong>{invite.groupId.name}</strong></span>
               <div style={{ display: "flex", gap: "8px" }}>
-                <button className="btn btn-primary" style={{ padding: "4px 12px", background: "var(--primary)", color: "black" }} onClick={() => handleRespondInvite(invite._id, "accepted")}>Accept</button>
+                <button className="btn btn-primary" style={{ padding: "4px 12px", background: "var(--primary)", color: "white" }} onClick={() => handleRespondInvite(invite._id, "accepted")}>Accept</button>
                 <button className="btn btn-secondary" style={{ padding: "4px 12px" }} onClick={() => handleRespondInvite(invite._id, "rejected")}>Decline</button>
               </div>
             </div>
@@ -105,7 +121,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
         ) : (
           groups.map((group) => (
             <div key={group._id} className="expense-row" onClick={() => selectGroup(group)} style={{ cursor: "pointer", gridTemplateColumns: "48px 1fr 1fr" }}>
-              <div className="expense-avatar" style={{ background: "var(--primary)", color: "black", fontWeight: "bold" }}>
+              <div className="expense-avatar" style={{ background: "var(--primary)", color: "white", fontWeight: "bold" }}>
                 {group.name.charAt(0).toUpperCase()}
               </div>
               <div className="expense-info">
@@ -125,10 +141,10 @@ export default function Groups({ token, groups, refreshDashboard }) {
           <div className="balance-card" style={{ maxWidth: "600px", width: "90%", maxHeight: "90vh", overflowY: "auto" }}>
             <div className="section-header" style={{ marginBottom: "var(--s-32)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                <div className="logo-icon" style={{ background: "var(--primary)", color: "black" }}>{selectedGroup.name.charAt(0).toUpperCase()}</div>
+                <div className="logo-icon" style={{ background: "var(--primary)", color: "white" }}>{selectedGroup.name.charAt(0).toUpperCase()}</div>
                 <h2 style={{ margin: 0 }}>{selectedGroup.name}</h2>
               </div>
-              <button className="btn" style={{ fontSize: "1.5rem", padding: "0 10px", background: "transparent", border: "none" }} onClick={() => setSelectedGroup(null)}>×</button>
+              <button className="btn" style={{ fontSize: "1.5rem", padding: "0 10px", background: "transparent", border: "none", color: "var(--text)" }} onClick={() => setSelectedGroup(null)}>×</button>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--s-32)" }}>
@@ -150,10 +166,26 @@ export default function Groups({ token, groups, refreshDashboard }) {
                 <h4 style={{ marginBottom: "var(--s-16)", color: "var(--text-secondary)" }}>Members</h4>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                   {selectedGroup.members.map((m) => (
-                    <span key={m._id} style={{ background: "#262626", padding: "4px 12px", borderRadius: "20px", fontSize: "0.85rem" }}>
+                    <span key={m._id} style={{ background: "var(--surface-hover)", border: "1px solid var(--border)", padding: "4px 12px", borderRadius: "20px", fontSize: "0.85rem" }}>
                       {m.username}
                     </span>
                   ))}
+                </div>
+
+                <div style={{ marginTop: "var(--s-32)" }}>
+                  <h4 style={{ marginBottom: "var(--s-16)", color: "var(--text-secondary)" }}>Invite Member</h4>
+                  <form onSubmit={handleInvite} style={{ display: "flex", gap: "8px" }}>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="Username..."
+                      value={inviteUsername}
+                      onChange={(e) => setInviteUsername(e.target.value)}
+                      style={{ padding: "8px 12px" }}
+                    />
+                    <button type="submit" className="btn btn-primary" style={{ padding: "8px 16px" }}>Invite</button>
+                  </form>
+                  {error && <p style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "8px" }}>{error}</p>}
                 </div>
               </div>
             </div>
