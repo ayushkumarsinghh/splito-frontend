@@ -343,8 +343,8 @@ body {
   font-weight: 600;
 }
 
-.logo-container { display: flex; align-items: center; gap: 12px; margin-bottom: 56px; padding: 0 8px; }
-.logo-img { height: 80px; width: auto; object-fit: contain; border-radius: 16px; }
+.logo-container { display: flex; align-items: center; gap: 0; margin-bottom: 56px; padding: 0 8px; }
+.logo-img { height: 80px; width: auto; object-fit: contain; border-radius: 16px; margin-right: -16px; }
 .logo-icon { width: 80px; height: 80px; background: var(--primary); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 2.2rem; overflow: hidden; }
 .logo-text { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
 
