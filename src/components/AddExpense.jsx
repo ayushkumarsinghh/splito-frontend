@@ -8,6 +8,7 @@ export default function AddExpense({ token, groups, refresh }) {
   const [splitWith, setSplitWith] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -38,8 +39,9 @@ export default function AddExpense({ token, groups, refresh }) {
       setAmount("");
       setGroupId("");
       setSplitWith([]);
+      setSuccess("Expense added successfully!");
+      setTimeout(() => setSuccess(""), 3000);
       refresh();
-      alert("Expense added successfully!");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add expense");
     } finally {
@@ -95,8 +97,14 @@ export default function AddExpense({ token, groups, refresh }) {
         </div>
 
         {error && (
-          <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+          <div className="text-danger fade-in" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
             {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="text-success fade-in" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "0.75rem", borderRadius: "8px", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(16, 185, 129, 0.2)" }}>
+            {success}
           </div>
         )}
 

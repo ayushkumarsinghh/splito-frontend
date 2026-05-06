@@ -7,6 +7,7 @@ export default function Settle({ token, refresh }) {
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   
   const [payeeUpi, setPayeeUpi] = useState(null);
   const [showQrModal, setShowQrModal] = useState(false);
@@ -72,8 +73,9 @@ export default function Settle({ token, refresh }) {
       setToUsername("");
       setAmount("");
       setShowQrModal(false);
+      setSuccess("Payment request sent!");
+      setTimeout(() => setSuccess(""), 3000);
       refresh();
-      alert("Payment request sent!");
     } catch (err) {
       setError(err.response?.data?.message || "Settlement failed");
     } finally {
@@ -91,7 +93,8 @@ export default function Settle({ token, refresh }) {
       fetchPendingRequests();
       refresh();
     } catch (err) {
-      alert("Failed to respond to request");
+      setError("Failed to respond to request");
+      setTimeout(() => setError(""), 3000);
     }
   };
 
@@ -125,8 +128,14 @@ export default function Settle({ token, refresh }) {
       </div>
 
       {error && (
-        <div className="text-danger" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+        <div className="text-danger fade-in" style={{ backgroundColor: "rgba(239, 68, 68, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
           {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="text-success fade-in" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", padding: "0.75rem", borderRadius: "8px", marginBottom: "1rem", textAlign: "center", fontSize: "0.85rem", border: "1px solid rgba(16, 185, 129, 0.2)" }}>
+          {success}
         </div>
       )}
 

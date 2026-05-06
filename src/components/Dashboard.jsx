@@ -24,6 +24,7 @@ export default function Dashboard({ token, setToken }) {
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [username, setUsername] = useState("User");
+  const [userId, setUserId] = useState(null);
   const [expandedCard, setExpandedCard] = useState(null);
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function Dashboard({ token, setToken }) {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsername(res.data.username);
+      setUserId(res.data._id);
     } catch (err) { console.error(err); }
   };
 
@@ -142,7 +144,7 @@ export default function Dashboard({ token, setToken }) {
              <h2 style={{ fontSize: "2.25rem", fontFamily: 'Outfit', fontWeight: 700 }}>Welcome, {username}</h2>
              <p style={{ color: "var(--text-secondary)" }}>Your financial overview for today.</p>
            </div>
-           <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "var(--primary-glow)", border: "1px solid var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", color: "var(--primary)" }}>
+           <div style={{ width: "56px", height: "56px", borderRadius: "16px", background: "var(--primary-glow)", border: "1px solid var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", color: "var(--primary)", fontSize: "1.2rem" }}>
              {username.charAt(0).toUpperCase()}
            </div>
         </header>
@@ -150,7 +152,7 @@ export default function Dashboard({ token, setToken }) {
         {activeView === "settings" ? (
           <Profile token={token} onBack={() => setActiveView("dashboard")} />
         ) : activeView === "groups" ? (
-          <Groups token={token} groups={groups} refreshDashboard={() => setRefreshTrigger(p => p + 1)} />
+          <Groups token={token} userId={userId} groups={groups} refreshDashboard={() => setRefreshTrigger(p => p + 1)} />
         ) : activeView === "activity" ? (
           <ExpenseHistory token={token} refreshTrigger={refreshTrigger} />
         ) : (

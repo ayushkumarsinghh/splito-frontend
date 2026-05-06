@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import axios from "axios";
 
-export default function Groups({ token, groups, refreshDashboard }) {
+export default function Groups({ token, userId, groups, refreshDashboard }) {
   const [showCreate, setShowCreate] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
   const [invites, setInvites] = useState([]);
@@ -10,6 +10,7 @@ export default function Groups({ token, groups, refreshDashboard }) {
   const [inviteUsername, setInviteUsername] = useState("");
   const [groupBalances, setGroupBalances] = useState(null);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -66,9 +67,24 @@ export default function Groups({ token, groups, refreshDashboard }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setInviteUsername("");
-      alert("Invite sent successfully!");
+      setSuccess("Invite sent successfully!");
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to send invite");
+      setTimeout(() => setError(""), 3000);
+    }
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!window.confirm("Are you sure you want to delete this group? This action cannot be undone.")) return;
+    try {
+      await axios.delete(`${API_URL}/api/groups/${selectedGroup._id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSelectedGroup(null);
+      refreshDashboard();
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to delete group");
       setTimeout(() => setError(""), 3000);
     }
   };
@@ -147,6 +163,18 @@ export default function Groups({ token, groups, refreshDashboard }) {
               <button className="btn" style={{ fontSize: "1.5rem", padding: "0 10px", background: "transparent", border: "none", color: "var(--text)" }} onClick={() => setSelectedGroup(null)}>×</button>
             </div>
 
+            {selectedGroup.createdBy === userId && (
+              <div style={{ marginBottom: "var(--s-24)", display: "flex", justifyContent: "flex-end" }}>
+                <button 
+                  className="btn" 
+                  onClick={handleDeleteGroup}
+                  style={{ color: "var(--danger)", background: "rgba(239, 68, 68, 0.1)", border: "1px solid rgba(239, 68, 68, 0.2)", padding: "8px 16px", fontSize: "0.85rem" }}
+                >
+                  Delete Group
+                </button>
+              </div>
+            )}
+
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--s-32)" }}>
               <div>
                 <h4 style={{ marginBottom: "var(--s-16)", color: "var(--text-secondary)" }}>Balances</h4>
@@ -185,7 +213,8 @@ export default function Groups({ token, groups, refreshDashboard }) {
                     />
                     <button type="submit" className="btn btn-primary" style={{ padding: "8px 16px" }}>Invite</button>
                   </form>
-                  {error && <p style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "8px" }}>{error}</p>}
+                  {error && <p style={{ color: "var(--danger)", fontSize: "0.85rem", marginTop: "12px", background: "rgba(239, 68, 68, 0.1)", padding: "8px", borderRadius: "8px" }}>{error}</p>}
+                  {success && <p style={{ color: "var(--success)", fontSize: "0.85rem", marginTop: "12px", background: "rgba(16, 185, 129, 0.1)", padding: "8px", borderRadius: "8px" }}>{success}</p>}
                 </div>
               </div>
             </div>
