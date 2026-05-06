@@ -343,10 +343,10 @@ body {
   font-weight: 600;
 }
 
-.logo-container { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; padding: 0 12px; }
-.logo-img { width: 32px; height: 32px; object-fit: contain; border-radius: 8px; }
-.logo-icon { width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; overflow: hidden; }
-.logo-text { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+.logo-container { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; padding: 0 12px; }
+.logo-img { width: 44px; height: 44px; object-fit: contain; border-radius: 10px; }
+.logo-icon { width: 44px; height: 44px; background: var(--primary); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.4rem; overflow: hidden; }
+.logo-text { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text); }
 
 /* 🚀 Utilities */
 .fade-in { animation: fadeIn 0.4s ease-out; }
