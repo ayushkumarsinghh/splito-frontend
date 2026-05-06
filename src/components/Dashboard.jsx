@@ -15,6 +15,7 @@ import RecentActivity from "./RecentActivity";
 import ExpenseHistory from "./ExpenseHistory";
 import Groups from "./Groups";
 import Profile from "./Profile";
+import logoImg from "../assets/logo.png";
 
 export default function Dashboard({ token, setToken }) {
   const [activeView, setActiveView] = useState("dashboard");
@@ -116,7 +117,7 @@ export default function Dashboard({ token, setToken }) {
     <div className="dashboard-layout fade-in">
       <aside className="sidebar">
         <div className="logo-container">
-          <div className="logo-icon">S</div>
+          <img src={logoImg} alt="Splito Logo" className="logo-img" />
           <div className="logo-text">Splito</div>
         </div>
         

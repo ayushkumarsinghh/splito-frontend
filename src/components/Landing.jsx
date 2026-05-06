@@ -8,6 +8,7 @@ import {
   TrendingUp,
   TrendingDown
 } from "lucide-react";
+import logoImg from "../assets/logo.png";
 
 export default function Landing({ setPage }) {
   const previewImage = "/dashboard_preview.png";
@@ -17,7 +18,7 @@ export default function Landing({ setPage }) {
       {/* 🏠 Navigation */}
       <nav className="landing-nav">
         <div className="logo-container" style={{ margin: 0 }}>
-          <div className="logo-icon">S</div>
+          <img src={logoImg} alt="Splito Logo" className="logo-img" />
           <div className="logo-text">Splito</div>
         </div>
         <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
@@ -163,7 +164,7 @@ export default function Landing({ setPage }) {
       <footer className="footer">
         <div style={{ textAlign: "center", marginBottom: "40px" }}>
           <div className="logo-container" style={{ justifyContent: "center", margin: "0 0 24px 0" }}>
-            <div className="logo-icon">S</div>
+            <img src={logoImg} alt="Splito Logo" className="logo-img" />
             <div className="logo-text">Splito</div>
           </div>
           <p style={{ color: "var(--text-secondary)", maxWidth: "400px", margin: "0 auto" }}>

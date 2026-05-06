@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { ArrowLeft } from "lucide-react";
+import logoImg from "../assets/logo.png";
 
 export default function Login({ setToken, setPage }) {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ export default function Login({ setToken, setPage }) {
     <div className="auth-container fade-in">
       <nav className="auth-nav">
         <div className="logo-container" onClick={() => setPage("landing")} style={{ cursor: "pointer", margin: 0 }}>
-          <div className="logo-icon">S</div>
+          <img src={logoImg} alt="Splito Logo" className="logo-img" />
           <div className="logo-text">Splito</div>
         </div>
         <div 
